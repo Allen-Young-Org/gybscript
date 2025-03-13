@@ -27,8 +27,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
 export default ProtectedRoute;
 
-// src/routes/routes.ts
- 
+  
 
 // Define route configurations for each sidebar type
 export const routeConfigs: Record<SidebarType, RouteConfig[]> = {

@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout';
 import ProtectedRoute from './ProtectedRoute';
 import Signin from '@/features/auth/Signin';
+import LandingPage from '@/features/home/LandingPage';
  
 // Loading component
 const LazyLoading = () => (
@@ -72,7 +73,7 @@ export const router = createBrowserRouter([
     path: "/home",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="home" /> */}
+        <LandingPage statusVar="home" />
       </Suspense>
     ),
   },

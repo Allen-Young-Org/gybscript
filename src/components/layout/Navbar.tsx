@@ -17,8 +17,7 @@ const Navbar = ({ displayType }: NavbarProps) => {
   const handleLogout = async () => {
     try {
       await logout();
-      // Redirect is handled by the ProtectedRoute component
-    } catch (error) {
+     } catch (error) {
       console.error('Logout error:', error);
     }
   };

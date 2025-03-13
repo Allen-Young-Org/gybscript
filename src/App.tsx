@@ -8,6 +8,7 @@ import AuthProvider from './providers/AuthProvider';
 import ThemeProvider from './providers/ThemeProvider';
 import SidebarProvider from './providers/SidebarProvider';
 import { queryClient } from './api/queryCLient';
+import { ScaleProvider } from './providers/DetectScaleContext';
  
  
 
@@ -23,12 +24,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
+        <ScaleProvider>
           <SidebarProvider>
             <Suspense fallback={<AppLoading />}>
               <RouterProvider router={router} />
             </Suspense>
              
-          </SidebarProvider>
+            </SidebarProvider>
+            </ScaleProvider>
         </AuthProvider>
       </ThemeProvider>
       {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />} */}
