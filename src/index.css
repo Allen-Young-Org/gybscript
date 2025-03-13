@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  @font-face {
+    font-family: "Galant";
+    font-display: swap;
+    src: url("https://fonts.googleapis.com/css2?family=Galant:wght@400;500;600;700&display=swap");
+  }
+
+  @font-face {
+    font-family: "Oswald";
+    src: url("./assets/fonts/Oswald-Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Raleway";
+    src: url("./assets/fonts/Raleway-VariableFont_wght.ttf") format("truetype");
+  }
+ 
+  body {
+    background: white;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* p {
+    margin: 0 ;
+    padding: 0 ;
+    line-height: 1 ;
+    letter-spacing: -1px ;
+  } */
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+  }
+  
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+  
+  /* Define accent color utility classes */
+  .text-accent {
+    color: var(--accent-color, #C09239);
+  }
+  
+  .bg-accent {
+    background-color: var(--accent-color, #C09239);
+  }
+  
+  .border-accent {
+    border-color: var(--accent-color, #C09239);
+  }
+  
+  .hover\:text-accent:hover {
+    color: var(--accent-color, #C09239);
+  }
+  
+  .hover\:bg-accent:hover {
+    background-color: var(--accent-color, #C09239);
+  }
+  
+  .hover\:border-accent:hover {
+    border-color: var(--accent-color, #C09239);
+  }
+  
+  /* Rest of your existing CSS */
+  .react-select__control:focus,
+  .react-select__control--is-focused {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #a1a1a1 !important;
+  }
+  
+  .react-select__control:hover {
+    border-color: #a1a1a1 !important;
+  }
+  [type="text"]:focus,
+  [type="email"]:focus,
+  [type="url"]:focus,
+  [type="password"]:focus,
+  [type="number"]:focus,
+  [type="date"]:focus,
+  [type="datetime-local"]:focus,
+  [type="month"]:focus,
+  [type="search"]:focus,
+  [type="tel"]:focus,
+  [type="time"]:focus,
+  [type="week"]:focus,
+  [multiple]:focus,
+  textarea:focus,
+  select:focus {
+    --tw-ring-offset-shadow: none;
+    --tw-ring-shadow: none;
+    box-shadow: none;
+    border-color: #a1a1a1; /* Or any color you prefer */
+  }
+  :root {
+    /* Base colors for light mode */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --accent-color: #C09239;
+
+    /* Default theme in light mode */
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --ring: 215 20.2% 65.1%;
+  }
+
+  /* Dark mode - default theme colors */
+  [data-theme="dark"] {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    /* Default theme in dark mode */
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --ring: 215 20.2% 65.1%;
+  }
+}
+
+
+/* Overlay to cover the whole page */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 9999; /* Ensure it's on top of other content */
+}
+
+/* HTML: <div class="loader"></div> */
+/* HTML: <div class="loader"></div> */
+.loader {
+  height: 80px;
+  aspect-ratio: 1;
+  display: grid;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  --c:no-repeat linear-gradient(#C09239 0 0);
+  background: var(--c), var(--c);
+  background-size: 25% 50%;
+  animation: l5 1.5s infinite linear;
+}
+.loader:after {
+  transform: scale(-1);
+}
+@keyframes l5 {
+  0%,
+  5%   {background-position:33.4% 100%,66.6% 100%}
+  25%  {background-position:33.4% 100%,100% 0}
+  50%  {background-position:0 0,100% 0}
+  75%  {background-position:0 0,66.6% 100%}
+  95%,
+  100% {background-position:33.4% 100%,66.6% 100%}
+} 
