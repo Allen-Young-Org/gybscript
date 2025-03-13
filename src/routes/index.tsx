@@ -81,7 +81,7 @@ export const router = createBrowserRouter([
     path: "/music",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="music" /> */}
+         <LandingPage statusVar="music" />
       </Suspense>
     ),
   },
@@ -89,7 +89,7 @@ export const router = createBrowserRouter([
     path: "/community",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="community" /> */}
+         <LandingPage statusVar="community" /> 
       </Suspense>
     ),
   },
@@ -97,7 +97,7 @@ export const router = createBrowserRouter([
     path: "/assets",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="assets" /> */}
+         <LandingPage statusVar="assets" /> 
       </Suspense>
     ),
   },
@@ -105,7 +105,7 @@ export const router = createBrowserRouter([
     path: "/promote",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="promote" /> */}
+        <LandingPage statusVar="promote" /> 
       </Suspense>
     ),
   },
@@ -113,7 +113,7 @@ export const router = createBrowserRouter([
     path: "/analytics",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="analytics" /> */}
+         <LandingPage statusVar="analytics" /> 
       </Suspense>
     ),
   },
@@ -121,7 +121,7 @@ export const router = createBrowserRouter([
     path: "/royalty",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <LandingPage statusVar="royalty" /> */}
+        <LandingPage statusVar="royalty" /> 
       </Suspense>
     ),
   },

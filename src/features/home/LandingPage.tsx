@@ -1,30 +1,31 @@
 // src/features/home/LandingPage.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import classNames from "classnames"; 
-import { useSidebar } from "@/providers/SidebarProvider"; 
+import classNames from "classnames";
+import { useSidebar } from "@/providers/SidebarProvider";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer"; 
-import LandingPageConfig, { NavigationItem, PageConfig } from "./LandingPageConfig"; 
-import circular from "@/assets/image/circular.png"; 
-import royalty from "@/assets/image/landingPage/royalty.png"; 
+import Footer from "@/components/layout/Footer";
+import LandingPageConfig, {
+  NavigationItem,
+  PageConfig,
+} from "./LandingPageConfig";
+import circular from "@/assets/image/circular.png";
+import royalty from "@/assets/image/landingPage/royalty.png";
 import { useScale } from "@/providers/DetectScaleContext";
 import { SidebarType } from "@/types/firebase";
- 
- 
 
 interface LandingPageProps {
   statusVar: string;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => { 
+const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
   const [isEdge, setIsEdge] = useState<boolean>(false);
-  const [status, setStatus] = useState<string>(statusVar); 
+  const [status, setStatus] = useState<string>(statusVar);
   const navigate = useNavigate();
   const { updateSidebarType } = useSidebar();
-  const scale = useScale(); 
+  const scale = useScale();
   const config: PageConfig = LandingPageConfig(status);
-  
+
   // Navigation handler
   const handleNavigation = (link: string, displayType?: SidebarType): void => {
     if (displayType) {
@@ -58,7 +59,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mt-[5.5rem]": scale == 1.3333333333333333 || scale === 1.25,
     "mt-32": scale == 1.5,
   });
-  
+
   // MARGIN TOP LEFT SECOND ICON
   const mtSLI = classNames({
     "mt-[24rem]":
@@ -70,7 +71,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mt-[14rem]": scale >= 1.5 && scale < 2,
     "mt-40": scale >= 2 && scale < 2.5,
   });
-  
+
   // MARGIN TOP LEFT THIRD ICON
   const mtTLI = classNames({
     "mt-[42rem]":
@@ -113,7 +114,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mr-[61.5%]": scale === 1.5 && isEdge,
     "mr-[66.5%]": scale >= 1.5 && !isEdge,
   });
-  
+
   // PADDING LEFT SIDE THIRD ICON
   const pTLI = classNames({
     "mr-[64.5rem]":
@@ -129,7 +130,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mr-[71.5%]": scale === 1.5 && isEdge,
     "mr-[79.5%]": scale >= 1.5 && !isEdge,
   });
-  
+
   // MARGIN TOP RIGHT FIRST ICON
   const mtFRI = classNames({
     "mt-[10rem]":
@@ -143,7 +144,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mt-[5.5rem]": scale == 1.3333333333333333 || scale === 1.25,
     "mt-32": scale == 1.5,
   });
-  
+
   // MARGIN TOP RIGHT SECOND ICON
   const mtSRI = classNames({
     "mt-[24rem]":
@@ -155,7 +156,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mt-[14rem]": scale >= 1.5 && scale < 2,
     "mt-40": scale >= 2 && scale < 2.5,
   });
-  
+
   // MARGIN TOP RIGHT THIRD ICON
   const mtTRI = classNames({
     "mt-[42rem]":
@@ -198,7 +199,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "ml-[61.5%]": scale === 1.5 && isEdge,
     "ml-[66.5%]": scale >= 1.5 && !isEdge,
   });
-  
+
   // PADDING RIGHT SIDE THIRD ICON
   const pTRI = classNames({
     "ml-[64.5rem]":
@@ -214,7 +215,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "ml-[71.5%]": scale === 1.5 && isEdge,
     "ml-[79.5%]": scale >= 1.5 && !isEdge,
   });
-  
+
   // Center Icons styling
   const CenterIcons = classNames({
     "mt-[25rem]":
@@ -225,7 +226,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
     "mt-[15rem]": scale >= 1 && scale < 1.5,
     "mt-[10rem]": scale == 1.5,
   });
-  
+
   const CenterIconsSize = classNames({
     "w-24 h-24": scale == 1.5 || scale == 1.3333333333333333 || scale == 1.25,
   });
@@ -233,14 +234,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
   return (
     <>
       <div className="h-screen dark:bg-gray-600/50 overflow-hidden">
-        <Navbar displayType={status as SidebarType} />
+        <Navbar />
 
         <div className="theArcPlace flex justify-center mt-2 container mx-auto">
           <div className="absolute -mt-4 theCenterDisplay cursor-pointer z-50">
             <img src={config.centerIcon} alt="Center Icon" />
           </div>
-          
-          <div className={`absolute ${CenterIcons} theCenterDisplay text-center cursor-pointer`}>
+
+          <div
+            className={`absolute ${CenterIcons} theCenterDisplay text-center cursor-pointer`}
+          >
             <h1 className="font-poppins text-accent text-6xl">
               {status.toUpperCase()}
             </h1>
@@ -263,7 +266,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
               ))}
             </div>
           </div>
-          
+
           {config.leftItems.map((item: NavigationItem, index: number) => {
             const mtClass = [mtFLI, mtSLI, mtTLI][index];
             const pClass = [pFLI, pSLI, pTLI][index];
@@ -276,7 +279,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
                   src={item.icon}
                   width={35}
                   height={35}
-                  className={`${item.icon === royalty && "w-7 h-10" }`}
+                  className={`${item.icon === royalty && "w-7 h-10"}`}
                   alt={`Left Icon ${index + 1}`}
                   onClick={() => handleNavigation(item.link, item.displayType)}
                 />
@@ -296,7 +299,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
                   src={item.icon}
                   width={35}
                   height={35}
-                  className={`${item.icon === royalty && "w-7 h-10"  }`}
+                  className={`${item.icon === royalty && "w-7 h-10"}`}
                   alt={`Right Icon ${index + 1}`}
                   onClick={() => handleNavigation(item.link, item.displayType)}
                 />
@@ -304,7 +307,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
             );
           })}
 
-          <img src={circular} className="dark:opacity-30" alt="Background Circle" />
+          <img
+            src={circular}
+            className="dark:opacity-30"
+            alt="Background Circle"
+          />
         </div>
 
         {scale !== 1.5 && (
