@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { DEFAULTS } from "../constants/defaults";
+import { DEFAULTS } from "../defaults";
 
-export const useDeferred = (value, delayTime) => {
-  const [val, setVal] = useState();
-  let timeOutId = null;
+export const useDeferred = (value: any, delayTime?: number) => {
+  const [val, setVal] = useState<any>();
+  let timeOutId: NodeJS.Timeout | null = null;
 
-  const cbDebounce = (cb) => {
-    if (!!timeOutId) {
+  const cbDebounce = (cb: () => void) => {
+    if (timeOutId) {
       clearTimeout(timeOutId);
     }
 
@@ -21,7 +21,7 @@ export const useDeferred = (value, delayTime) => {
     }, delayTime || DEFAULTS.deferredtime);
 
     return () => clearTimeout(delay);
-  }, [value]);
+  }, [value, delayTime]);
 
   return { val, cbDebounce };
 };

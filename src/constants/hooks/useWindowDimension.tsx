@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { Dimensions } from "../constants/dimensions";
+import { Dimensions } from "../dimensions";
 
-export const useDimensions = () => {
-  const [dimension, setDimension] = useState({
+interface Dimension {
+  phone: boolean;
+}
+
+export const useDimensions = (): Dimension => {
+  const [dimension, setDimension] = useState<Dimension>({
     phone: window.innerWidth <= Dimensions.phoneDimensions,
   });
 

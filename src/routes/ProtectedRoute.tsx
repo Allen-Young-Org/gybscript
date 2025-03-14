@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '@/providers/AuthProvider';
-import { RouteConfig, SidebarType } from '@/types/firebase';
+import { ReactNode } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "@/providers/AuthProvider";
+//import { RouteConfig, SidebarType } from "@/types/firebase";
 
 interface ProtectedRouteProps {
   children?: ReactNode;
@@ -27,9 +27,8 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
 export default ProtectedRoute;
 
-  
-
-// Define route configurations for each sidebar type
+{
+  /* 
 export const routeConfigs: Record<SidebarType, RouteConfig[]> = {
   home: [
     {
@@ -162,3 +161,5 @@ export const routeConfigs: Record<SidebarType, RouteConfig[]> = {
     },
   ],
 };
+*/
+}

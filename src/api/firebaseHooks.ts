@@ -32,7 +32,7 @@ export const useAddDocumentWithProperties = (collectionName: string) => {
     },
   });
 };
-
+// Update document with property 
 export const useUpdateDocumentsWithProperties = (
   collectionName: string,
   queryFields: Record<string, any>
