@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
-import logoBrown from "../../../assets/image/login/GYB-Logo-1.png";
-import { Checkbox } from "@/components/ui/checkbox";
-import googleIcon from "../../../assets/google.svg";
-import appleIcon from "../../../assets/apple-icon.png";
+import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { auth, db } from "@/firebase";
+import { v4 as uuidv4 } from "uuid";
+import debounce from "lodash/debounce";
+import bcrypt from "bcryptjs";
 import {
   createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import {
   doc,
@@ -18,14 +18,22 @@ import {
   query,
   where,
   getDocs,
+  Timestamp,
 } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcryptjs";
-import debounce from "lodash/debounce";
-import { auth, db } from "@/firebase";
-import { Link } from "react-router-dom";
+ 
+import { Button } from "@/components/ui/button";
+import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
+import { Checkbox } from "@/components/ui/checkbox"; 
+import logoBrown from '../../../assets/image/login/GYB-Logo-1.png';
+import googleIcon from '../../../assets/google.svg';
+import appleIcon from '../../../assets/apple-icon.png'; 
+import { UserDetails } from "@/types/auth";
 
-interface FormData {
+interface SignUpStep1Props {
+  onStepComplete: (data: Partial<UserDetails>) => void;
+}
+
+interface FormValues {
   email: string;
   password: string;
   confirmPassword: string;
@@ -38,77 +46,19 @@ interface PasswordValidation {
   alphanumeric: boolean;
 }
 
-export interface UserData {
-  userId: string;
-  authId: string;
-  email: string;
-  created_password: string;
-  createdAt: Date;
-  updatedAt: Date;
-  emailVerified: boolean;
-  currentStep: string;
-  status: string;
-  account_name: string;
-  account_type: string;
-  age18orabove: boolean;
-  alt_name: string;
-  artist_band_name: string;
-  bank_name: string;
-  bio: string;
-  business_title: string;
-  citizenship: string;
-  completeDetails: boolean;
-  dob: string;
-  facebook_link: string;
-  first_name: string;
-  instagram_link: string;
-  label_organization: string;
-  last_name: string;
-  mailing_address_1: string;
-  mailing_address_2: string;
-  mailing_city: string;
-  mailing_country: string;
-  mailing_state: string;
-  mailing_zip: string;
-  middle_name: string;
-  performer_ch_both: string;
-  phone: string;
-  publishing_company: string;
-  registering_type: string;
-  routing_number: string;
-  ssn: string;
-  street_address_1: string;
-  street_address_2: string;
-  street_city: string;
-  street_country: string;
-  street_state: string;
-  street_zip: string;
-  tiktok_link: string;
-  twitter_link: string;
-  website_link: string;
-  youtube_link: string;
-}
-
-interface SignUpStep1Props {
-  onStepComplete: (userData: UserData) => void;
-}
-
-const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
-  // State management
+const SignUpStep1 = ({ onStepComplete }: SignUpStep1Props) => { 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmailChecking, setIsEmailChecking] = useState<boolean>(false);
   const [emailExists, setEmailExists] = useState<boolean>(false);
   const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
-  const [passwordValidation, setPasswordValidation] =
-    useState<PasswordValidation>({
-      length: false,
-      uppercase: false,
-      special: false,
-      alphanumeric: false,
-    });
+  const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({
+    length: false,
+    uppercase: false,
+    special: false,
+    alphanumeric: false,
+  });
 
   const {
     register,
@@ -117,12 +67,11 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormValues>();
 
   const password = watch("password", "");
   const email = watch("email", "");
-
-  // Check email existence in both Auth and Firestore
+ 
   const checkEmailExistence = async (email: string): Promise<void> => {
     try {
       setIsEmailChecking(true);
@@ -153,8 +102,7 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
       setIsEmailChecking(false);
     }
   };
-
-  // Debounced email check
+ 
   const debouncedCheckEmail = debounce(checkEmailExistence, 500);
 
   useEffect(() => {
@@ -162,7 +110,7 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
       debouncedCheckEmail(email);
     }
     return () => debouncedCheckEmail.cancel();
-  }, [email, debouncedCheckEmail]);
+  }, [email]);
 
   useEffect(() => {
     if (password) {
@@ -175,7 +123,7 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
     }
   }, [password]);
 
-  const validatePassword = (value: string): true | string => {
+  const validatePassword = (value: string): boolean | string => {
     if (value.length < 8) return "Password must be at least 8 characters";
     if (!/[A-Z]/.test(value))
       return "Password must contain at least 1 uppercase letter";
@@ -186,91 +134,85 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
     return true;
   };
 
-  const handleFormSubmit = async (data: FormData): Promise<void> => {
+  const handleFormSubmit = async (data: FormValues): Promise<void> => {
     if (isLoading || !termsAccepted) return;
 
     try {
       setIsLoading(true);
-
-      // Create user in Firebase Auth
+ 
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         data.email,
         data.password
       );
-
-      // Hash password for storage
+ 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(data.password, salt);
-
-      // Prepare user data
+ 
       const userId = uuidv4();
-      const userData: UserData = {
-        userId,
+      const userData: Partial<UserDetails> = {
+        id: userId,
         authId: userCredential.user.uid,
         email: data.email.toLowerCase(),
-        created_password: hashedPassword,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        password: hashedPassword,
+        createdAt: Timestamp.fromDate(new Date()),
+        updatedAt: Timestamp.fromDate(new Date()),
         emailVerified: false,
         currentStep: "1",
         status: "pending",
-        account_name: "",
-        account_type: "",
-        age18orabove: false,
-        alt_name: "",
-        artist_band_name: "",
-        bank_name: "",
+        accountName: "",
+        accountType: "",
+        age18orAbove: false,
+        altName: "",
+        artistBandName: "",
+        bankName: "",
         bio: "",
-        business_title: "",
+        businessTitle: "",
         citizenship: "",
         completeDetails: false,
         dob: "",
-        facebook_link: "",
-        first_name: "",
-        instagram_link: "",
-        label_organization: "",
-        last_name: "",
-        mailing_address_1: "",
-        mailing_address_2: "",
-        mailing_city: "",
-        mailing_country: "",
-        mailing_state: "",
-        mailing_zip: "",
-        middle_name: "",
-        performer_ch_both: "",
+        facebookLink: "",
+        firstName: "",
+        instagramLink: "",
+        labelOrganization: "",
+        lastName: "",
+        mailingAddress1: "",
+        mailingAddress2: "",
+        mailingCity: "",
+        mailingCountry: "",
+        mailingState: "",
+        mailingZip: "",
+        middleName: "",
+        performerChBoth: "",
         phone: "",
-        publishing_company: "",
-        registering_type: "",
-        routing_number: "",
+        publishingCompany: "",
+        registeringType: "",
+        routingNumber: "",
         ssn: "",
-        street_address_1: "",
-        street_address_2: "",
-        street_city: "",
-        street_country: "",
-        street_state: "",
-        street_zip: "",
-        tiktok_link: "",
-        twitter_link: "",
-        website_link: "",
-        youtube_link: "",
-      };
-
-      // Save user data to Firestore
+        streetAddress1: "",
+        streetAddress2: "",
+        streetCity: "",
+        streetCountry: "",
+        streetState: "",
+        streetZip: "",
+        tiktokLink: "",
+        twitterLink: "",
+        websiteLink: "",
+        youtubeLink: ""
+      }; 
       await setDoc(doc(db, "user_registration", userId), userData);
-
-      // Proceed to next step
+ 
       onStepComplete(userData);
+ 
     } catch (error: any) {
-      console.error("Error during signup:", error);
-      // Handle specific error cases
+      console.error("Error during signup:", error); 
       if (error.code === "auth/email-already-in-use") {
         setError("email", {
           type: "manual",
           message: "This email is already registered",
         });
       } else {
-        setError("root", {
+        setError("root.serverError", {
           type: "manual",
           message: "An error occurred during registration",
         });
@@ -286,7 +228,7 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
         <img src={logoBrown} alt="GYB Logo" className="w-24" />
       </div>
 
-      <h2 className="text-2xl font-bold mb-2 text-center">
+      <h2 className="text-2xl text-[#C09239] font-bold mb-2 text-center">
         CREATE YOUR ACCOUNT
       </h2>
       <div className="flex justify-center gap-2 mb-2">
@@ -306,7 +248,7 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
           className="bg-[#F7F7F7] h-9 border border-[#CFD8E6] font-normal !font-poppins text-[12px] leading-[1.125rem] mt-2 cursor-pointer text-[#121212] w-full"
           disabled={isLoading}
         >
-          <img src={googleIcon} className="w-5 h-5" alt="Google icon" />
+          <img src={googleIcon} className="w-5 h-5" alt="Google" />
           Sign in with Google
         </Button>
 
@@ -315,7 +257,7 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
           className="w-full flex hover:bg-black hover:text-white items-center justify-center mt-2 gap-2 bg-black text-white text-[12px] leading-[1.125rem] font-normal !font-poppins"
           disabled={isLoading}
         >
-          <img src={appleIcon} className="w-8 h-8" alt="Apple icon" />
+          <img src={appleIcon} className="w-8 h-8" alt="Apple" />
           Sign in with Apple
         </Button>
       </div>
@@ -334,12 +276,14 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
             })}
             error={errors.email?.message}
             disabled={isLoading}
+            value={email}
+            onChange={(e) => register("email").onChange(e)}
           />
           {isEmailChecking && (
             <span
               className={`absolute right-3 top-1/2 ${
                 errors.email?.message ? "top-1/3" : "top-1/2"
-              } -translate-y-1/2 text-sm text-gray-500`}
+              } -translate-y-1/2 text-sm text-gray-500}`}
             >
               <svg
                 className="animate-spin h-5 w-5 text-gray-500"
@@ -375,6 +319,8 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
             })}
             error={errors.password?.message}
             disabled={isLoading}
+            value={password}
+            onChange={(e) => register("password").onChange(e)}
           />
           <button
             type="button"
@@ -450,7 +396,9 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
           <Checkbox
             id="terms1"
             checked={termsAccepted}
-            onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+            onCheckedChange={(checked) => 
+              setTermsAccepted(checked === true)
+            }
             disabled={isLoading}
           />
           <div className="grid gap-1.5 leading-none">
@@ -463,8 +411,8 @@ const SignUpStep1: React.FC<SignUpStep1Props> = ({ onStepComplete }) => {
           </div>
         </div>
 
-        {errors.root && (
-          <p className="text-sm text-red-500">{errors.root.message}</p>
+        {errors.root?.serverError && (
+          <p className="text-sm text-red-500">{errors.root.serverError.message}</p>
         )}
 
         <Button
