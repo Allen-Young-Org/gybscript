@@ -1,80 +1,57 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Country, State } from "country-state-city";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase"; 
 import { Button } from "@/components/ui/button";
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Country, State } from "country-state-city";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase";
-import { FloatingLabelCombobox } from "@/components/ui/ComboboxFloatingLabel";
-import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { FloatingLabelCombobox } from "@/components/ui/ComboboxFloatingLabel"; 
+import { useAuth } from "@/providers/AuthProvider"; 
+import { UserDetails } from "@/types/auth";
 
-interface Option {
+interface SignUpStep3Props {
+  onBack: () => void;
+  onStepComplete: (data: Partial<UserDetails>) => void;
+  userData: UserDetails | null;
+}
+
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  phone: string;
+  streetAddress1: string;
+  streetAddress2?: string;
+  streetCountry: string;
+  streetCity: string;
+  streetState: string;
+  streetZip: string;
+  mailingAddress1: string;
+  mailingAddress2?: string;
+  mailingCountry: string;
+  mailingCity: string;
+  mailingState: string;
+  mailingZip: string;
+}
+
+interface LocationOption {
   value: string;
   label: string;
 }
 
-interface UserData {
-  userId?: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  street_address_1?: string;
-  street_address_2?: string;
-  street_country?: string;
-  street_city?: string;
-  street_state?: string;
-  street_zip?: string;
-  mailing_address_1?: string;
-  mailing_address_2?: string;
-  mailing_country?: string;
-  mailingAddress?: {
-    city?: string;
-  };
-  mailing_state?: string;
-  mailing_zip?: string;
-  searchableName?: string;
-}
-
-interface FormData {
-  first_name: string;
-  last_name: string;
-  middle_name: string;
-  phone: string;
-  street_address_1: string;
-  street_address_2: string;
-  street_country: string;
-  street_city: string;
-  street_state: string;
-  street_zip: string;
-  mailing_address_1: string;
-  mailing_address_2: string;
-  mailing_country: string;
-  mailing_city: string;
-  mailing_state: string;
-  mailing_zip: string;
-  searchableName: string;
-}
-
-interface SignUpStep3Props {
-  onBack: () => void;
-  onStepComplete: (data: FormData) => void;
-  userData: UserData;
-}
-
-const SignUpStep3: React.FC<SignUpStep3Props> = ({
-  onBack,
-  onStepComplete,
-  userData,
-}) => {
+const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => {
   const [sameAsResidential, setSameAsResidential] = useState<boolean>(true);
-  const [countries, setCountries] = useState<Option[]>([]);
-  const [states, setStates] = useState<Option[]>([]);
-  const [mailingStates, setMailingStates] = useState<Option[]>([]);
+  const [countries, setCountries] = useState<LocationOption[]>([]);
+  const [states, setStates] = useState<LocationOption[]>([]);
+  const [mailingStates, setMailingStates] = useState<LocationOption[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -83,61 +60,55 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
     watch,
     setValue,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<FormValues>({
     defaultValues: {
-      first_name: userData?.first_name?.toLowerCase() || "",
-      last_name: userData?.last_name?.toLowerCase() || "",
-      middle_name: "",
+      firstName: userData?.firstName?.toLowerCase() || "",
+      lastName: userData?.lastName?.toLowerCase() || "",
+      middleName: userData?.middleName || "",
       phone: userData?.phone || "",
-      street_address_1: userData?.street_address_1?.toLowerCase() || "",
-      street_address_2: userData?.street_address_2?.toLowerCase() || "",
-      street_country: userData?.street_country?.toLowerCase() || "",
-      street_city: userData?.street_city?.toLowerCase() || "",
-      street_state: userData?.street_state?.toLowerCase() || "",
-      street_zip: userData?.street_zip || "",
-      mailing_address_1: userData?.mailing_address_1?.toLowerCase() || "",
-      mailing_address_2: userData?.mailing_address_2?.toLowerCase() || "",
-      mailing_country: userData?.mailing_country?.toLowerCase() || "",
-      mailing_city: userData?.mailingAddress?.city?.toLowerCase() || "",
-      mailing_state: userData?.mailing_state?.toLowerCase() || "",
-      mailing_zip: userData?.mailing_zip || "",
-      searchableName: userData?.searchableName || "",
-    },
+      streetAddress1: userData?.streetAddress1?.toLowerCase() || "",
+      streetAddress2: userData?.streetAddress2?.toLowerCase() || "",
+      streetCountry: userData?.streetCountry?.toLowerCase() || "",
+      streetCity: userData?.streetCity?.toLowerCase() || "",
+      streetState: userData?.streetState?.toLowerCase() || "",
+      streetZip: userData?.streetZip || "",
+      mailingAddress1: userData?.mailingAddress1?.toLowerCase() || "",
+      mailingAddress2: userData?.mailingAddress2?.toLowerCase() || "",
+      mailingCountry: userData?.mailingCountry?.toLowerCase() || "",
+      mailingCity: userData?.mailingCity?.toLowerCase() || "",
+      mailingState: userData?.mailingState?.toLowerCase() || "",
+      mailingZip: userData?.mailingZip || "",
+    }
   });
-
-  const { logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = async (): Promise<void> => {
     try {
       await logout();
-      navigate("/user_sign_in"); // Navigate after logout
+      navigate('/user_sign_in');
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
 
-  // Watch for country changes to update states
-  const selectedCountry = watch("street_country");
-  const selectedMailingCountry = watch("mailing_country");
+  
+  const selectedCountry = watch("streetCountry");
+  const selectedMailingCountry = watch("mailingCountry");
   const streetFields = watch([
-    "street_address_1",
-    "street_address_2",
-    "street_country",
-    "street_city",
-    "street_state",
-    "street_zip",
-  ]) as string[];
+    'streetAddress1',
+    'streetAddress2',
+    'streetCountry',
+    'streetCity',
+    'streetState',
+    'streetZip'
+  ]);
 
-  // Load countries on component mount
+ 
   useEffect(() => {
     try {
-      const countryList: Option[] = Country.getAllCountries().map(
-        (country) => ({
-          value: country.isoCode,
-          label: country.name,
-        })
-      );
+      const countryList = Country.getAllCountries().map(country => ({
+        value: country.isoCode,
+        label: country.name
+      }));
       setCountries(countryList);
       setIsLoading(false);
     } catch (error) {
@@ -146,15 +117,13 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
     }
   }, []);
 
-  // Update states when residential country changes
+  
   useEffect(() => {
     if (selectedCountry) {
       try {
-        const stateList: Option[] = State.getStatesOfCountry(
-          selectedCountry
-        ).map((state) => ({
+        const stateList = State.getStatesOfCountry(selectedCountry).map(state => ({
           value: state.isoCode,
-          label: state.name,
+          label: state.name
         }));
         setStates(stateList);
       } catch (error) {
@@ -166,15 +135,13 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
     }
   }, [selectedCountry]);
 
-  // Update mailing states when mailing country changes
+ 
   useEffect(() => {
     if (selectedMailingCountry) {
       try {
-        const stateList: Option[] = State.getStatesOfCountry(
-          selectedMailingCountry
-        ).map((state) => ({
+        const stateList = State.getStatesOfCountry(selectedMailingCountry).map(state => ({
           value: state.isoCode,
-          label: state.name,
+          label: state.name
         }));
         setMailingStates(stateList);
       } catch (error) {
@@ -186,80 +153,87 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
     }
   }, [selectedMailingCountry]);
 
-  // If mailing address is same as residential, update mailing fields automatically
+  
   useEffect(() => {
-    if (sameAsResidential) {
-      setValue("mailing_address_1", streetFields[0] || "");
-      setValue("mailing_address_2", streetFields[1] || "");
-      setValue("mailing_country", streetFields[2] || "");
-      setValue("mailing_city", streetFields[3] || "");
-      setValue("mailing_state", streetFields[4] || "");
-      setValue("mailing_zip", streetFields[5] || "");
+    if (sameAsResidential && streetFields.some(field => field !== undefined)) {
+      setTimeout(() => {
+        setValue("mailingAddress1", streetFields[0] || "");
+        setValue("mailingAddress2", streetFields[1] || "");
+        setValue("mailingCountry", streetFields[2] || "");
+        setValue("mailingCity", streetFields[3] || "");
+        setValue("mailingState", streetFields[4] || "");
+        setValue("mailingZip", streetFields[5] || "");
+      }, 0);
     }
-  }, [sameAsResidential, setValue, streetFields]);
+  }, [sameAsResidential, streetFields, setValue]);
 
-  const onSubmit = async (data: FormData): Promise<void> => {
+ 
+  const submitUserData = useCallback(async (data: FormValues): Promise<void> => {
+    if (isSubmitting || !userData?.id) return;
+    
+    setIsSubmitting(true);
     try {
-      if (!userData?.userId) {
-        throw new Error("User ID is required");
-      }
+      const userDocRef = doc(db, "user_registration", userData.id);
 
-      const userDocRef = doc(db, "user_registration", userData.userId);
+      const mailingAddressData = sameAsResidential ? {
+        mailingAddress1: data.streetAddress1.toLowerCase(),
+        mailingAddress2: data.streetAddress2?.toLowerCase() || "",
+        mailingCountry: data.streetCountry.toLowerCase(),
+        mailingCity: data.streetCity.toLowerCase(),
+        mailingState: data.streetState.toLowerCase(),
+        mailingZip: data.streetZip
+      } : {
+        mailingAddress1: data.mailingAddress1.toLowerCase(),
+        mailingAddress2: data.mailingAddress2?.toLowerCase() || "",
+        mailingCountry: data.mailingCountry.toLowerCase(),
+        mailingCity: data.mailingCity.toLowerCase(),
+        mailingState: data.mailingState.toLowerCase(),
+        mailingZip: data.mailingZip
+      };
 
-      const mailingAddressData = sameAsResidential
-        ? {
-            mailing_address_1: data.street_address_1.toLowerCase(),
-            mailing_address_2: data.street_address_2.toLowerCase(),
-            mailing_country: data.street_country.toLowerCase(),
-            mailing_city: data.street_city.toLowerCase(),
-            mailing_state: data.street_state.toLowerCase(),
-            mailing_zip: data.street_zip,
-          }
-        : {
-            mailing_address_1: data.mailing_address_1.toLowerCase(),
-            mailing_address_2: data.mailing_address_2.toLowerCase(),
-            mailing_country: data.mailing_country.toLowerCase(),
-            mailing_city: data.mailing_city.toLowerCase(),
-            mailing_state: data.mailing_state.toLowerCase(),
-            mailing_zip: data.mailing_zip,
-          };
-
-      const updateData: FormData = {
-        first_name: data.first_name.toLowerCase(),
-        last_name: data.last_name.toLowerCase(),
-        middle_name: data.middle_name,
+      const updateData = {
+        firstName: data.firstName.toLowerCase(),
+        lastName: data.lastName.toLowerCase(),
         phone: data.phone,
-        street_address_1: data.street_address_1.toLowerCase(),
-        street_address_2: data.street_address_2.toLowerCase() || "",
-        street_country: data.street_country.toLowerCase(),
-        street_city: data.street_city.toLowerCase(),
-        street_state: data.street_state.toLowerCase(),
-        street_zip: data.street_zip,
-        mailing_address_1: mailingAddressData.mailing_address_1,
-        mailing_address_2: mailingAddressData.mailing_address_2,
-        mailing_country: mailingAddressData.mailing_country,
-        mailing_city: mailingAddressData.mailing_city,
-        mailing_state: mailingAddressData.mailing_state,
-        mailing_zip: mailingAddressData.mailing_zip,
-        searchableName: `${data.first_name.toLowerCase()} ${data.last_name.toLowerCase()}`,
+        streetAddress1: data.streetAddress1.toLowerCase(),
+        streetAddress2: data.streetAddress2?.toLowerCase() || "",
+        streetCountry: data.streetCountry.toLowerCase(),
+        streetCity: data.streetCity.toLowerCase(),
+        streetState: data.streetState.toLowerCase(),
+        streetZip: data.streetZip,
+        searchableName: `${data.firstName.toLowerCase()} ${data.lastName.toLowerCase()}`,
+        ...mailingAddressData
       };
 
       await updateDoc(userDocRef, updateData);
-      onStepComplete(updateData);
+       
+      setTimeout(() => {
+        onStepComplete(updateData);
+      }, 0);
     } catch (error) {
       console.error("Error updating user profile:", error);
+    } finally {
+      setIsSubmitting(false);
     }
+  }, [userData, sameAsResidential, isSubmitting, onStepComplete]);
+ 
+  const onSubmit = (data: FormValues): void => {
+    submitUserData(data);
   };
-
+ 
   const handleSameAddressChange = (checked: boolean): void => {
     setSameAsResidential(checked);
+    
     if (!checked) {
-      setValue("mailing_address_1", "");
-      setValue("mailing_address_2", "");
-      setValue("mailing_country", "");
-      setValue("mailing_city", "");
-      setValue("mailing_state", "");
-      setValue("mailing_zip", "");
+ 
+      setTimeout(() => {
+        setValue("mailingAddress1", "");
+        setValue("mailingAddress2", "");
+        setValue("mailingCountry", "");
+        setValue("mailingCity", "");
+        setValue("mailingState", "");
+        setValue("mailingZip", "");
+      }, 0);
     }
   };
 
@@ -268,35 +242,34 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header Section */}
-      <h2 className="text-2xl font-bold mb-2 text-center">
-        COMPLETE YOUR PROFILE
-      </h2>
+    <div className="space-y-6"> 
+      <h2 className="text-2xl text-[#C09239] font-bold mb-2 text-center">COMPLETE YOUR PROFILE</h2>
       <div className="flex justify-center gap-2 mb-6">
         {[1, 2, 3, 4, 5].map((dot) => (
           <div
             key={dot}
-            className={`w-3 h-3 rounded-full ${
-              dot === 3 ? "bg-[#C09239]" : "bg-gray-300"
-            }`}
+            className={`w-3 h-3 rounded-full ${dot === 3 ? "bg-[#C09239]" : "bg-gray-300"}`}
           />
         ))}
       </div>
-
-      {/* Form Section */}
+ 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Personal Information */}
         <div className="grid grid-cols-2 gap-4">
           <FloatingLabelInput
             label="First Name"
-            {...register("first_name", { required: "First name is required" })}
-            error={errors.first_name?.message}
+            {...register("firstName", {
+              required: "First name is required"
+            })}
+            error={errors.firstName?.message}
           />
+
           <FloatingLabelInput
             label="Last Name"
-            {...register("last_name", { required: "Last name is required" })}
-            error={errors.last_name?.message}
+            {...register("lastName", {
+              required: "Last name is required"
+            })}
+            error={errors.lastName?.message}
           />
         </div>
 
@@ -307,8 +280,8 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
             required: "Phone number is required",
             pattern: {
               value: /^\+?\d{10,14}$/,
-              message: "Invalid phone number",
-            },
+              message: "Invalid phone number"
+            }
           })}
           error={errors.phone?.message}
         />
@@ -316,17 +289,20 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
         {/* Residential Address Section */}
         <FloatingLabelInput
           label="Address Line 1"
-          {...register("street_address_1", { required: "Address is required" })}
-          error={errors.street_address_1?.message}
+          {...register("streetAddress1", {
+            required: "Address is required"
+          })}
+          error={errors.streetAddress1?.message}
         />
+
         <FloatingLabelInput
           label="Address Line 2 (Optional)"
-          {...register("street_address_2")}
+          {...register("streetAddress2")}
         />
 
         <div className="grid grid-cols-2 gap-4 font-poppins">
           <Controller
-            name="street_country"
+            name="streetCountry"
             control={control}
             rules={{ required: "Country is required" }}
             render={({ field }) => (
@@ -335,21 +311,22 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
                 value={field.value}
                 onChange={field.onChange}
                 options={countries}
-                error={errors.street_country?.message}
-                {...field}
+                error={errors.streetCountry?.message}
               />
             )}
           />
           <FloatingLabelInput
             label="City"
-            {...register("street_city", { required: "City is required" })}
-            error={errors.street_city?.message}
+            {...register("streetCity", {
+              required: "City is required"
+            })}
+            error={errors.streetCity?.message}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <Controller
-            name="street_state"
+            name="streetState"
             control={control}
             rules={{ required: "State is required" }}
             render={({ field }) => (
@@ -358,21 +335,21 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
                 value={field.value}
                 onChange={field.onChange}
                 options={states}
-                error={errors.street_state?.message}
+                error={errors.streetState?.message}
                 disabled={!selectedCountry}
               />
             )}
           />
           <FloatingLabelInput
             label="ZIP/Postal Code"
-            {...register("street_zip", {
+            {...register("streetZip", {
               required: "ZIP code is required",
               pattern: {
                 value: /^\d{5}(-\d{4})?$/,
-                message: "Invalid ZIP code",
-              },
+                message: "Invalid ZIP code"
+              }
             })}
-            error={errors.street_zip?.message}
+            error={errors.streetZip?.message}
           />
         </div>
 
@@ -381,7 +358,7 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
           <Checkbox
             id="sameAsResidential"
             checked={sameAsResidential}
-            onCheckedChange={handleSameAddressChange}
+            onCheckedChange={(checked) => handleSameAddressChange(checked === true)}
           />
           <label
             htmlFor="sameAsResidential"
@@ -394,28 +371,26 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
         {/* Mailing Address Section */}
         {!sameAsResidential && (
           <div className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold text-gray-700">
-              Mailing Address
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-700">Mailing Address</h3>
             <FloatingLabelInput
               label="Address Line 1"
-              {...register("mailing_address_1", {
-                required: !sameAsResidential
-                  ? "Mailing address is required"
-                  : false,
+              {...register("mailingAddress1", {
+                required: !sameAsResidential ? "Mailing address is required" : false
               })}
-              error={errors.mailing_address_1?.message}
+              error={errors.mailingAddress1?.message}
             />
+
             <FloatingLabelInput
               label="Address Line 2 (Optional)"
-              {...register("mailing_address_2")}
+              {...register("mailingAddress2")}
             />
+
             <div className="grid grid-cols-2 gap-4">
               <Controller
-                name="mailing_country"
+                name="mailingCountry"
                 control={control}
                 rules={{
-                  required: !sameAsResidential ? "Country is required" : false,
+                  required: !sameAsResidential ? "Country is required" : false
                 }}
                 render={({ field }) => (
                   <FloatingLabelCombobox
@@ -423,24 +398,25 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
                     value={field.value}
                     onChange={field.onChange}
                     options={countries}
-                    error={errors.mailing_country?.message}
+                    error={errors.mailingCountry?.message}
                   />
                 )}
               />
               <FloatingLabelInput
                 label="City"
-                {...register("mailing_city", {
-                  required: !sameAsResidential ? "City is required" : false,
+                {...register("mailingCity", {
+                  required: !sameAsResidential ? "City is required" : false
                 })}
-                error={errors.mailing_city?.message}
+                error={errors.mailingCity?.message}
               />
             </div>
+
             <div className="grid grid-cols-2 gap-4">
               <Controller
-                name="mailing_state"
+                name="mailingState"
                 control={control}
                 rules={{
-                  required: !sameAsResidential ? "State is required" : false,
+                  required: !sameAsResidential ? "State is required" : false
                 }}
                 render={({ field }) => (
                   <FloatingLabelCombobox
@@ -448,21 +424,21 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
                     value={field.value}
                     onChange={field.onChange}
                     options={mailingStates}
-                    error={errors.mailing_state?.message}
+                    error={errors.mailingState?.message}
                     disabled={!selectedMailingCountry}
                   />
                 )}
               />
               <FloatingLabelInput
                 label="ZIP/Postal Code"
-                {...register("mailing_zip", {
+                {...register("mailingZip", {
                   required: !sameAsResidential ? "ZIP code is required" : false,
                   pattern: {
                     value: /^\d{5}(-\d{4})?$/,
-                    message: "Invalid ZIP code",
-                  },
+                    message: "Invalid ZIP code"
+                  }
                 })}
-                error={errors.mailing_zip?.message}
+                error={errors.mailingZip?.message}
               />
             </div>
           </div>
@@ -473,16 +449,18 @@ const SignUpStep3: React.FC<SignUpStep3Props> = ({
           <Button
             type="button"
             variant="outline"
-            className="flex-1"
+            className="flex-1 !bg-inherit text-black border-black"
             onClick={handleLogout}
+            disabled={isSubmitting}
           >
             Back
           </Button>
           <Button
             type="submit"
             className="flex-1 bg-[#C09239] hover:bg-[#C09239]/90 text-white"
+            disabled={isSubmitting}
           >
-            Continue
+            {isSubmitting ? 'Saving...' : 'Continue'}
           </Button>
         </div>
       </form>

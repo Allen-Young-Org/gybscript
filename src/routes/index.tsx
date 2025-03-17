@@ -1,9 +1,10 @@
-import { lazy, Suspense } from 'react';
+import {   Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout';
 import ProtectedRoute from './ProtectedRoute';
 import Signin from '@/features/auth/Signin';
 import LandingPage from '@/features/home/LandingPage';
+import SignUp from '@/features/auth/Signup';
  
 // Loading component
 const LazyLoading = () => (
@@ -57,7 +58,7 @@ export const router = createBrowserRouter([
     path: "/user_sign_up",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        {/* <SignUp /> */}
+        <SignUp />
       </Suspense>
     ),
   },
