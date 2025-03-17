@@ -98,7 +98,8 @@ const SignUpStep2 = ({ onBack, onStepComplete, userData }: SignUpStep2Props) => 
   };
 
   return (
-    <div className="space-y-6 min-w-6xl">
+    // <div className="space-y-6 min-w-6xl">
+    <>
       <h2 className="text-3xl text-[#C09239] font-bold mb-2 text-center">GET STARTED</h2>
       <p className="text-center text-gray-600 mb-2">Bells and Whistles to complete your profile.</p>
       <p className="text-center text-gray-600 mb-8">
@@ -166,7 +167,8 @@ const SignUpStep2 = ({ onBack, onStepComplete, userData }: SignUpStep2Props) => 
         title="Success!" 
         description="You have successfully verified your email!" 
       />
-    </div>
+  {/* </div> */}
+      </>
   );
 };
 
