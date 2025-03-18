@@ -1,78 +1,53 @@
-import { useState } from 'react';
+import React, { useState } from "react";
+import Hendrix from "../../assets/profilepics/hendrix.jpg";
+import { useTheme } from "@/providers/ThemeProvider";
 
-const Chatbox = () => {
-  const [message, setMessage] = useState('');
-  const [chatMessages, setChatMessages] = useState<Array<{
-    id: number;
-    text: string;
-    isUser: boolean;
-  }>>([
-    { id: 1, text: 'Hi there! How can I help you today?', isUser: false }
-  ]);
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!message.trim()) return;
-    
-     const newUserMessage = {
-      id: chatMessages.length + 1,
-      text: message,
-      isUser: true
-    };
-    
-    setChatMessages([...chatMessages, newUserMessage]);
-    setMessage('');
-    
-     setTimeout(() => {
-      const botResponse = {
-        id: chatMessages.length + 2,
-        text: "Thanks for your message! Our team will get back to you soon.",
-        isUser: false
-      };
-      
-      setChatMessages(prevMessages => [...prevMessages, botResponse]);
-    }, 1000);
-  };
-  
+interface Profile {
+  firstname: string;
+  lastname: string;
+}
+
+// Sample profiles array – replace with your actual data.
+const profiles: Profile[] = [
+  { firstname: "Jimi", lastname: "Hendrix" },
+  { firstname: "Stevie", lastname: "Wonder" },
+  { firstname: "Prince", lastname: "Nelson" },
+];
+
+const Chatbox: React.FC = () => {
+  const { isDarkMode } = useTheme();
+  const [followedUsers, setFollowedUsers] = useState<Profile[]>([]);
+
   return (
-    <div className="flex flex-col h-full">
-      <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
-        Support Chat
-      </h3>
-      
-      <div className="flex-grow overflow-y-auto mb-4 space-y-3">
-        {chatMessages.map(msg => (
-          <div
-            key={msg.id}
-            className={`p-3 rounded-lg ${
-              msg.isUser
-                ? 'bg-accent text-white ml-6'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 mr-6'
-            }`}
-          >
-            {msg.text}
+    <div>
+      <div className="font-semibold dark:text-white">Artist Active</div>
+      <div className="mt-3 dark:text-gray-300">
+        {profiles.map((profile, index) => (
+          <div className="flex mt-3" key={index}>
+            <div className="mr-2">
+              <img
+                className="rounded-full h-8 w-8 object-cover"
+                src={Hendrix}
+                alt={`${profile.firstname} ${profile.lastname}`}
+              />
+            </div>
+            <p className="mt-1 text-sm">
+              {profile.firstname} {profile.lastname}
+            </p>
+            <div className="ml-auto mt-1">
+              <svg
+                width="8"
+                height="8"
+                viewBox="0 0 8 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="4.30078" cy="3.62305" r="3.5" fill="#5EC46F" />
+              </svg>
+            </div>
           </div>
         ))}
       </div>
-      
-      <form onSubmit={handleSubmit} className="mt-auto">
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-accent"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-accent text-white rounded-r-md hover:bg-accent/90"
-          >
-            Send
-          </button>
-        </div>
-      </form>
     </div>
   );
 };

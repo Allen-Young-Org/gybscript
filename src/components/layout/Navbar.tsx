@@ -142,7 +142,7 @@ const Navbar = () => {
             <img src={GybLogo} alt="GYB Logo" />
           </Link>
         </div>
-        <div className="w-[54%]">
+        <div className="w-[50%]">
           {displayType === "home" && secondSegment && (
             <div className="flex space-x-4  gap-5">
               <div>
