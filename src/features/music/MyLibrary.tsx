@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
+
 import { serverTimestamp } from "firebase/firestore";
-//import { useAuth } from "../../context/AuthContext";
 import { useAuth } from "@/providers/AuthProvider";
 import LoadingSpinner from "@/components/layout/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
@@ -16,17 +16,17 @@ import {
 
 // Define interfaces for props and data models
 interface MyLibraryProps {
-  imported: boolean;
-  onIncludeSong: (songID: string) => void;
-  selectedSongIDs: { songID: string }[];
-  fromLyrics: boolean;
-  fromPromote: boolean;
-  setActiveTab: (tab: string) => void;
-  setPromotionType: (type: string) => void;
-  setSelectedSongs: (songs: any[]) => void;
-  setSelectedAlbums: (albums: any[]) => void;
-  filtered: string;
-  setFiltered: (value: string) => void;
+  imported?: boolean;
+  onIncludeSong?: (songID: string, songTitle: string) => void;
+  selectedSongIDs?: { songID: string }[];
+  fromLyrics?: boolean;
+  fromPromote?: boolean;
+  setActiveTab?: (tab: string) => void;
+  setPromotionType?: (type: string) => void;
+  setSelectedSongs?: (songs: any[]) => void;
+  setSelectedAlbums?: (albums: any[]) => void;
+
+  setFiltered?: (value: string) => void;
 }
 
 export interface Song {
@@ -47,25 +47,26 @@ export interface Album {
 }
 
 const MyLibrary: React.FC<MyLibraryProps> = ({
-  imported,
-  onIncludeSong,
-  selectedSongIDs,
-  fromLyrics,
-  fromPromote,
-  setActiveTab,
-  setPromotionType,
-  setSelectedSongs,
-  setSelectedAlbums,
-  filtered,
-  setFiltered,
+  imported = false,
+  onIncludeSong = () => {},
+  selectedSongIDs = [],
+  fromLyrics = false,
+  fromPromote = false,
+  setActiveTab = () => {},
+  setPromotionType = () => {},
+  setSelectedSongs = () => {},
+  setSelectedAlbums = () => {},
+  setFiltered = () => {},
 }) => {
   const {
+    /*
     control,
     formState: { errors },
     register,
     handleSubmit,
     setValue,
     reset,
+    */
   } = useForm();
   const { userDetails } = useAuth();
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
     []
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
 
   // Fetch songs and albums using TanStack Query hooks
   const { data: songsData, isLoading: songsLoading } = useDocumentByFields(
@@ -144,8 +145,8 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
     setCurrentPage(1);
   }, [searchTermImported]);
 
-  const includeSong = (songID: string) => {
-    onIncludeSong(songID);
+  const includeSong = (songID: string,songTitle:string) => {
+    onIncludeSong(songID, songTitle);
   };
 
   const isSongSelected = (songID: string) => {
@@ -260,7 +261,7 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
   };
 
   const handleEditAlbum = (album: Album) => {
-    navigate(`/music/uploadalbum?update=true`, {
+    navigate(`/music/createalbum?update=true`, {
       state: { albumData: album },
     });
   };
@@ -339,7 +340,8 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
                         : "bg-white dark:bg-gray-600/0 cursor-pointer"
                     } shadow border-[1px] p-4`}
                     onClick={() =>
-                      !isSongSelected(song.songID) && includeSong(song.songID)
+                      !isSongSelected(song.songID) &&
+                      includeSong(song.songID, song.SongTitle)
                     }
                   >
                     <img
@@ -353,7 +355,8 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
                       isSongSelected(song.songID) ? "" : "cursor-pointer"
                     } justify-center text-sm mt-2 flex space-x-1 max-w-44 truncate`}
                     onClick={() =>
-                      !isSongSelected(song.songID) && includeSong(song.songID)
+                      !isSongSelected(song.songID) &&
+                      includeSong(song.songID, song.SongTitle)
                     }
                   >
                     <div className="truncate">{song.SongTitle}</div>

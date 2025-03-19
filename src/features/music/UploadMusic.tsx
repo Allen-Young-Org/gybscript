@@ -105,6 +105,7 @@ function UploadMusic() {
       });
       setValue("SongTitle", songData.SongTitle);
       setValue("showArtists", songData.showArtists);
+      setValue("dateOfRelease", songData.dateOfRelease);
       setValue("featuredArtists", []);
       setValue("versionTitle", songData.versionTitle);
       setValue("songWriter", songData.songWriter);
@@ -454,7 +455,7 @@ function UploadMusic() {
           songID: uuidv4(),
           upc: "",
           isrc: "",
-          userId: (userDetails as any).userId,
+          userId: (userDetails as any).userId
         };
 
         const newDocumentData = {

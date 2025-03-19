@@ -21,7 +21,7 @@ const Navbar = () => {
   };
 
   const uploadAlbum = () => {
-    nav(`/${"music/uploadalbum"}`);
+    nav(`/${"music/createalbum"}`);
   };
   const gybLive = () => {
     nav(`/${"music/gybLive"}`);
@@ -331,14 +331,14 @@ const Navbar = () => {
                       icon="streamline:tape-cassette-record"
                       style={{ fontSize: "32px" }}
                       className={`${
-                        secondSegment === "uploadalbum"
+                        secondSegment === "createalbum"
                           ? "text-accent"
                           : "text-gray-500"
                       } `}
                     />
                     <div
                       className={` text-xs ${
-                        secondSegment === "uploadalbum"
+                        secondSegment === "createalbum"
                           ? "text-accent"
                           : "text-gray-500"
                       } `}
@@ -347,7 +347,7 @@ const Navbar = () => {
                     </div>
                     <div
                       className={`${
-                        secondSegment === "uploadalbum"
+                        secondSegment === "createalbum"
                           ? "border-b-4 border-accent"
                           : ""
                       } h-1 w-full`}
