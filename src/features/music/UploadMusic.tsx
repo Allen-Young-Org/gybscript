@@ -105,6 +105,7 @@ function UploadMusic() {
       });
       setValue("SongTitle", songData.SongTitle);
       setValue("showArtists", songData.showArtists);
+      setValue("dateOfRelease", songData.dateOfRelease);
       setValue("featuredArtists", []);
       setValue("versionTitle", songData.versionTitle);
       setValue("songWriter", songData.songWriter);
