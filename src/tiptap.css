@@ -1,0 +1,35 @@
+/* TipTap Editor Styles */
+.tiptap-editor {
+    @apply font-poppins;
+  }
+  
+  .tiptap-editor .ProseMirror {
+    @apply outline-none min-h-[120px];
+  }
+  
+  .tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+    @apply text-gray-400 float-left h-0 pointer-events-none;
+    content: attr(data-placeholder);
+  }
+  
+  /* Dark mode support */
+  .dark .tiptap-editor .ProseMirror {
+    @apply text-white;
+  }
+  
+  /* Content styling */
+  .tiptap-editor .ProseMirror h1 {
+    @apply text-2xl font-bold mb-4;
+  }
+  
+  .tiptap-editor .ProseMirror h2 {
+    @apply text-xl font-bold mb-3;
+  }
+  
+  .tiptap-editor .ProseMirror ul {
+    @apply list-disc pl-6 mb-4;
+  }
+  
+  .tiptap-editor .ProseMirror ol {
+    @apply list-decimal pl-6 mb-4;
+  }

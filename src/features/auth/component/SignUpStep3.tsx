@@ -19,22 +19,22 @@ interface SignUpStep3Props {
 }
 
 interface FormValues {
-  firstName: string;
-  lastName: string;
-  middleName?: string;
+  first_name: string;
+  last_name: string;
+  middle_name?: string;
   phone: string;
-  streetAddress1: string;
-  streetAddress2?: string;
-  streetCountry: string;
-  streetCity: string;
-  streetState: string;
-  streetZip: string;
-  mailingAddress1: string;
-  mailingAddress2?: string;
-  mailingCountry: string;
-  mailingCity: string;
-  mailingState: string;
-  mailingZip: string;
+  street_address_1: string;
+  street_address_2?: string;
+  street_country: string;
+  street_city: string;
+  street_state: string;
+  street_zip: string;
+  mailing_address_1: string;
+  mailing_address_2?: string;
+  mailing_country: string;
+  mailing_city: string;
+  mailing_state: string;
+  mailing_zip: string;
 }
 
 interface LocationOption {
@@ -46,7 +46,7 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
   const [sameAsResidential, setSameAsResidential] = useState<boolean>(true);
   const [countries, setCountries] = useState<LocationOption[]>([]);
   const [states, setStates] = useState<LocationOption[]>([]);
-  const [mailingStates, setMailingStates] = useState<LocationOption[]>([]);
+  const [mailing_states, setmailing_states] = useState<LocationOption[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -62,22 +62,22 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      firstName: userData?.firstName?.toLowerCase() || "",
-      lastName: userData?.lastName?.toLowerCase() || "",
-      middleName: userData?.middleName || "",
+      first_name: userData?.first_name?.toLowerCase() || "",
+      last_name: userData?.last_name?.toLowerCase() || "",
+      middle_name: userData?.middle_name || "",
       phone: userData?.phone || "",
-      streetAddress1: userData?.streetAddress1?.toLowerCase() || "",
-      streetAddress2: userData?.streetAddress2?.toLowerCase() || "",
-      streetCountry: userData?.streetCountry?.toLowerCase() || "",
-      streetCity: userData?.streetCity?.toLowerCase() || "",
-      streetState: userData?.streetState?.toLowerCase() || "",
-      streetZip: userData?.streetZip || "",
-      mailingAddress1: userData?.mailingAddress1?.toLowerCase() || "",
-      mailingAddress2: userData?.mailingAddress2?.toLowerCase() || "",
-      mailingCountry: userData?.mailingCountry?.toLowerCase() || "",
-      mailingCity: userData?.mailingCity?.toLowerCase() || "",
-      mailingState: userData?.mailingState?.toLowerCase() || "",
-      mailingZip: userData?.mailingZip || "",
+      street_address_1: userData?.street_address_1?.toLowerCase() || "",
+      street_address_2: userData?.street_address_2?.toLowerCase() || "",
+      street_country: userData?.street_country?.toLowerCase() || "",
+      street_city: userData?.street_city?.toLowerCase() || "",
+      street_state: userData?.street_state?.toLowerCase() || "",
+      street_zip: userData?.street_zip || "",
+      mailing_address_1: userData?.mailing_address_1?.toLowerCase() || "",
+      mailing_address_2: userData?.mailing_address_2?.toLowerCase() || "",
+      mailing_country: userData?.mailing_country?.toLowerCase() || "",
+      mailing_city: userData?.mailing_city?.toLowerCase() || "",
+      mailing_state: userData?.mailing_state?.toLowerCase() || "",
+      mailing_zip: userData?.mailing_zip || "",
     }
   });
 
@@ -91,15 +91,15 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
   };
 
   
-  const selectedCountry = watch("streetCountry");
-  const selectedMailingCountry = watch("mailingCountry");
+  const selectedCountry = watch("street_country");
+  const selectedmailing_country = watch("mailing_country");
   const streetFields = watch([
-    'streetAddress1',
-    'streetAddress2',
-    'streetCountry',
-    'streetCity',
-    'streetState',
-    'streetZip'
+    'street_address_1',
+    'street_address_2',
+    'street_country',
+    'street_city',
+    'street_state',
+    'street_zip'
   ]);
 
  
@@ -137,32 +137,32 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
 
  
   useEffect(() => {
-    if (selectedMailingCountry) {
+    if (selectedmailing_country) {
       try {
-        const stateList = State.getStatesOfCountry(selectedMailingCountry).map(state => ({
+        const stateList = State.getStatesOfCountry(selectedmailing_country).map(state => ({
           value: state.isoCode,
           label: state.name
         }));
-        setMailingStates(stateList);
+        setmailing_states(stateList);
       } catch (error) {
         console.error("Error loading mailing states:", error);
-        setMailingStates([]);
+        setmailing_states([]);
       }
     } else {
-      setMailingStates([]);
+      setmailing_states([]);
     }
-  }, [selectedMailingCountry]);
+  }, [selectedmailing_country]);
 
   
   useEffect(() => {
     if (sameAsResidential && streetFields.some(field => field !== undefined)) {
       setTimeout(() => {
-        setValue("mailingAddress1", streetFields[0] || "");
-        setValue("mailingAddress2", streetFields[1] || "");
-        setValue("mailingCountry", streetFields[2] || "");
-        setValue("mailingCity", streetFields[3] || "");
-        setValue("mailingState", streetFields[4] || "");
-        setValue("mailingZip", streetFields[5] || "");
+        setValue("mailing_address_1", streetFields[0] || "");
+        setValue("mailing_address_2", streetFields[1] || "");
+        setValue("mailing_country", streetFields[2] || "");
+        setValue("mailing_city", streetFields[3] || "");
+        setValue("mailing_state", streetFields[4] || "");
+        setValue("mailing_zip", streetFields[5] || "");
       }, 0);
     }
   }, [sameAsResidential, streetFields, setValue]);
@@ -176,32 +176,32 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
       const userDocRef = doc(db, "user_registration", userData.id);
 
       const mailingAddressData = sameAsResidential ? {
-        mailingAddress1: data.streetAddress1.toLowerCase(),
-        mailingAddress2: data.streetAddress2?.toLowerCase() || "",
-        mailingCountry: data.streetCountry.toLowerCase(),
-        mailingCity: data.streetCity.toLowerCase(),
-        mailingState: data.streetState.toLowerCase(),
-        mailingZip: data.streetZip
+        mailing_address_1: data.street_address_1.toLowerCase(),
+        mailing_address_2: data.street_address_2?.toLowerCase() || "",
+        mailing_country: data.street_country.toLowerCase(),
+        mailing_city: data.street_city.toLowerCase(),
+        mailing_state: data.street_state.toLowerCase(),
+        mailing_zip: data.street_zip
       } : {
-        mailingAddress1: data.mailingAddress1.toLowerCase(),
-        mailingAddress2: data.mailingAddress2?.toLowerCase() || "",
-        mailingCountry: data.mailingCountry.toLowerCase(),
-        mailingCity: data.mailingCity.toLowerCase(),
-        mailingState: data.mailingState.toLowerCase(),
-        mailingZip: data.mailingZip
+        mailing_address_1: data.mailing_address_1.toLowerCase(),
+        mailing_address_2: data.mailing_address_2?.toLowerCase() || "",
+        mailing_country: data.mailing_country.toLowerCase(),
+        mailing_city: data.mailing_city.toLowerCase(),
+        mailing_state: data.mailing_state.toLowerCase(),
+        mailing_zip: data.mailing_zip
       };
 
       const updateData = {
-        firstName: data.firstName.toLowerCase(),
-        lastName: data.lastName.toLowerCase(),
+        first_name: data.first_name.toLowerCase(),
+        last_name: data.last_name.toLowerCase(),
         phone: data.phone,
-        streetAddress1: data.streetAddress1.toLowerCase(),
-        streetAddress2: data.streetAddress2?.toLowerCase() || "",
-        streetCountry: data.streetCountry.toLowerCase(),
-        streetCity: data.streetCity.toLowerCase(),
-        streetState: data.streetState.toLowerCase(),
-        streetZip: data.streetZip,
-        searchableName: `${data.firstName.toLowerCase()} ${data.lastName.toLowerCase()}`,
+        street_address_1: data.street_address_1.toLowerCase(),
+        street_address_2: data.street_address_2?.toLowerCase() || "",
+        street_country: data.street_country.toLowerCase(),
+        street_city: data.street_city.toLowerCase(),
+        street_state: data.street_state.toLowerCase(),
+        street_zip: data.street_zip,
+        searchableName: `${data.first_name.toLowerCase()} ${data.last_name.toLowerCase()}`,
         ...mailingAddressData
       };
 
@@ -227,12 +227,12 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
     if (!checked) {
  
       setTimeout(() => {
-        setValue("mailingAddress1", "");
-        setValue("mailingAddress2", "");
-        setValue("mailingCountry", "");
-        setValue("mailingCity", "");
-        setValue("mailingState", "");
-        setValue("mailingZip", "");
+        setValue("mailing_address_1", "");
+        setValue("mailing_address_2", "");
+        setValue("mailing_country", "");
+        setValue("mailing_city", "");
+        setValue("mailing_state", "");
+        setValue("mailing_zip", "");
       }, 0);
     }
   };
@@ -258,18 +258,18 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
         <div className="grid grid-cols-2 gap-4">
           <FloatingLabelInput
             label="First Name"
-            {...register("firstName", {
+            {...register("first_name", {
               required: "First name is required"
             })}
-            error={errors.firstName?.message}
+            error={errors.first_name?.message}
           />
 
           <FloatingLabelInput
             label="Last Name"
-            {...register("lastName", {
+            {...register("last_name", {
               required: "Last name is required"
             })}
-            error={errors.lastName?.message}
+            error={errors.last_name?.message}
           />
         </div>
 
@@ -289,20 +289,20 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
         {/* Residential Address Section */}
         <FloatingLabelInput
           label="Address Line 1"
-          {...register("streetAddress1", {
+          {...register("street_address_1", {
             required: "Address is required"
           })}
-          error={errors.streetAddress1?.message}
+          error={errors.street_address_1?.message}
         />
 
         <FloatingLabelInput
           label="Address Line 2 (Optional)"
-          {...register("streetAddress2")}
+          {...register("street_address_2")}
         />
 
         <div className="grid grid-cols-2 gap-4 font-poppins">
           <Controller
-            name="streetCountry"
+            name="street_country"
             control={control}
             rules={{ required: "Country is required" }}
             render={({ field }) => (
@@ -311,22 +311,22 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
                 value={field.value}
                 onChange={field.onChange}
                 options={countries}
-                error={errors.streetCountry?.message}
+                error={errors.street_country?.message}
               />
             )}
           />
           <FloatingLabelInput
             label="City"
-            {...register("streetCity", {
+            {...register("street_city", {
               required: "City is required"
             })}
-            error={errors.streetCity?.message}
+            error={errors.street_city?.message}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <Controller
-            name="streetState"
+            name="street_state"
             control={control}
             rules={{ required: "State is required" }}
             render={({ field }) => (
@@ -335,21 +335,21 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
                 value={field.value}
                 onChange={field.onChange}
                 options={states}
-                error={errors.streetState?.message}
+                error={errors.street_state?.message}
                 disabled={!selectedCountry}
               />
             )}
           />
           <FloatingLabelInput
             label="ZIP/Postal Code"
-            {...register("streetZip", {
+            {...register("street_zip", {
               required: "ZIP code is required",
               pattern: {
                 value: /^\d{5}(-\d{4})?$/,
                 message: "Invalid ZIP code"
               }
             })}
-            error={errors.streetZip?.message}
+            error={errors.street_zip?.message}
           />
         </div>
 
@@ -374,20 +374,20 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
             <h3 className="text-lg font-semibold text-gray-700">Mailing Address</h3>
             <FloatingLabelInput
               label="Address Line 1"
-              {...register("mailingAddress1", {
+              {...register("mailing_address_1", {
                 required: !sameAsResidential ? "Mailing address is required" : false
               })}
-              error={errors.mailingAddress1?.message}
+              error={errors.mailing_address_1?.message}
             />
 
             <FloatingLabelInput
               label="Address Line 2 (Optional)"
-              {...register("mailingAddress2")}
+              {...register("mailing_address_2")}
             />
 
             <div className="grid grid-cols-2 gap-4">
               <Controller
-                name="mailingCountry"
+                name="mailing_country"
                 control={control}
                 rules={{
                   required: !sameAsResidential ? "Country is required" : false
@@ -398,22 +398,22 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
                     value={field.value}
                     onChange={field.onChange}
                     options={countries}
-                    error={errors.mailingCountry?.message}
+                    error={errors.mailing_country?.message}
                   />
                 )}
               />
               <FloatingLabelInput
                 label="City"
-                {...register("mailingCity", {
+                {...register("mailing_city", {
                   required: !sameAsResidential ? "City is required" : false
                 })}
-                error={errors.mailingCity?.message}
+                error={errors.mailing_city?.message}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <Controller
-                name="mailingState"
+                name="mailing_state"
                 control={control}
                 rules={{
                   required: !sameAsResidential ? "State is required" : false
@@ -423,22 +423,22 @@ const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => 
                     label="State/Province"
                     value={field.value}
                     onChange={field.onChange}
-                    options={mailingStates}
-                    error={errors.mailingState?.message}
-                    disabled={!selectedMailingCountry}
+                    options={mailing_states}
+                    error={errors.mailing_state?.message}
+                    disabled={!selectedmailing_country}
                   />
                 )}
               />
               <FloatingLabelInput
                 label="ZIP/Postal Code"
-                {...register("mailingZip", {
+                {...register("mailing_zip", {
                   required: !sameAsResidential ? "ZIP code is required" : false,
                   pattern: {
                     value: /^\d{5}(-\d{4})?$/,
                     message: "Invalid ZIP code"
                   }
                 })}
-                error={errors.mailingZip?.message}
+                error={errors.mailing_zip?.message}
               />
             </div>
           </div>

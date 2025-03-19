@@ -4,57 +4,58 @@ export interface User {
   id: string;
   email: string;
   emailVerified: boolean;
-  firstName?: string;
-  lastName?: string;
-  middleName?: string;
+  first_name?: string;
+  last_name?: string;
+  middle_name?: string;
   createdAt?: FirebaseTimestamp;
   updatedAt?: FirebaseTimestamp;
   currentStep?: string;
   status?: string;
   phone?: string;
-  password?: string;
+  created_pasword?: string;
   authId?: string;
   
   // Address fields
-  streetAddress1?: string;
-  streetAddress2?: string;
-  streetCity?: string;
-  streetState?: string;
-  streetCountry?: string;
-  streetZip?: string;
+  street_address_1?: string;
+  street_address_2?: string;
+  street_city?: string;
+  street_state?: string;
+  street_country?: string;
+  street_zip?: string;
   
-  mailingAddress1?: string;
-  mailingAddress2?: string;
-  mailingCity?: string;
-  mailingState?: string;
-  mailingCountry?: string;
-  mailingZip?: string;
+  mailing_address_1?: string;
+  mailing_address_2?: string;
+  mailing_city?: string;
+  mailing_state?: string;
+  mailing_country?: string;
+  mailing_zip?: string;
   
   // Profile data
-  accountName?: string;
-  accountType?: string;
+  account_name?: string;
+  account_type?: string;
   age18orAbove?: boolean;
-  altName?: string;
-  artistBandName?: string;
-  bankName?: string;
+  alt_name?: string;
+  artist_band_name?: string;
+  bank_name?: string;
   bio?: string;
-  businessTitle?: string;
+  business_title?: string;
   citizenship?: string;
   completeDetails?: boolean;
   dob?: string;
-  facebookLink?: string;
-  instagramLink?: string;
-  labelOrganization?: string;
-  performerChBoth?: string;
-  publishingCompany?: string;
-  registeringType?: string;
+  facebook_link?: string;
+  instagram_link?: string;
+  label_organization?: string;
+  performer_ch_both?: string;
+  publishing_company?: string;
+  registering_type?: string;
   routingNumber?: string;
   searchableName?: string;
   ssn?: string;
-  tiktokLink?: string;
-  twitterLink?: string;
-  websiteLink?: string;
-  youtubeLink?: string;
+  tiktok_link?: string;
+  twitter_link?: string;
+  website_link?: string;
+  youtube_link?: string;
+  profilePhotoUrl?: string;
 }
 
 export interface Subscription {
