@@ -14,7 +14,7 @@ import { queryClient } from './api/queryCLient';
  
  
 
-// Loading component
+ 
 const AppLoading = () => (
   <div className="loader-overlay">
     <div className="loader"></div>
@@ -24,8 +24,9 @@ const AppLoading = () => (
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <AuthProvider>
+    <ThemeProvider defaultTheme="system" defaultAccentColor="#C09239" storageKey="vite-ui-theme">
+      
         <ScaleProvider>
           <SidebarProvider>
             <Suspense fallback={<AppLoading />}>
@@ -34,8 +35,9 @@ function App() {
              
             </SidebarProvider>
             </ScaleProvider>
+       
+        </ThemeProvider>
         </AuthProvider>
-      </ThemeProvider>
       {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />} */}
     </QueryClientProvider>
   );
