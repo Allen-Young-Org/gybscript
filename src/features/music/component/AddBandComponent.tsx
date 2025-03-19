@@ -3,21 +3,15 @@ import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import LoadingSpinner from "@/components/layout/LoadingSpinner";
 import AlertBox from "@/components/ui/AlertBox";
 import { useAuth } from "@/providers/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
+import { serverTimestamp } from "firebase/firestore";
+import {
+  useAddDocumentWithProperties,
+  useUpdateDocumentsWithProperties,
+} from "@/api/firebaseHooks";
 
 // ----- Type Definitions -----
 interface BandMember {
@@ -33,7 +27,7 @@ interface BandData {
 interface BandFormValues {
   bandName: string;
   bandMembers: BandMember[];
-  status?: string; // Add the optional 'status' property
+  status?: string; // Added status property
 }
 
 interface AddBandComponentProps {
@@ -101,45 +95,57 @@ const AddBandComponent: React.FC<AddBandComponentProps> = ({
     appendBandMembers({ name: "" });
   };
 
-  const handleFormSubmit: SubmitHandler<BandFormValues> = async (data) => {
+  // Initialize mutations using your TanStack hooks.
+  const addBandMutation = useAddDocumentWithProperties("bands");
+  // For update, we use the bandID from the item. When item is not present, we pass a dummy value.
+  const updateBandMutation = useUpdateDocumentsWithProperties("bands", {
+    bandID: item ? item.bandID : "none",
+  });
+
+  const handleFormSubmit: SubmitHandler<BandFormValues> = (data) => {
     setOnLoading(true);
-    try {
-      const db = getFirestore();
-
-      if (item) {
-        // Update existing band
-        const bandsRef = collection(db, "bands");
-        const q = query(bandsRef, where("bandID", "==", item.bandID));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          const bandDoc = querySnapshot.docs[0];
-          await updateDoc(doc(db, "bands", bandDoc.id), {
-            ...data,
-            updatedTimestamp: serverTimestamp(),
-          });
-          setSuccessMessage("You have successfully updated your band!");
-        } else {
-          throw new Error("Band not found");
+    if (item) {
+      // Update existing band using the hook
+      updateBandMutation.mutate(
+        {
+          ...data,
+          updatedTimestamp: serverTimestamp(),
+        },
+        {
+          onSuccess: () => {
+            setSuccessMessage("You have successfully updated your band!");
+            setOnLoading(false);
+            setShowDialog(true);
+          },
+          onError: (error) => {
+            console.error("Error updating band:", error);
+            setOnLoading(false);
+          },
         }
-      } else {
-        // Create new band
-        data["status"] = "active";
-        await addDoc(collection(db, "bands"), {
+      );
+    } else {
+      // Create new band using the hook
+      data["status"] = "active";
+      addBandMutation.mutate(
+        {
           ...data,
           timestamp: serverTimestamp(),
           updatedTimestamp: "",
           userId: userId,
           bandID: uuidv4(),
-        });
-        setSuccessMessage("You have successfully created your band!");
-      }
-
-      setOnLoading(false);
-      setShowDialog(true);
-    } catch (error) {
-      console.error("Error saving band data:", error);
-      setOnLoading(false);
+        },
+        {
+          onSuccess: () => {
+            setSuccessMessage("You have successfully created your band!");
+            setOnLoading(false);
+            setShowDialog(true);
+          },
+          onError: (error) => {
+            console.error("Error creating band:", error);
+            setOnLoading(false);
+          },
+        }
+      );
     }
   };
 
