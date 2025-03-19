@@ -99,6 +99,7 @@ const PreSignUp = (): JSX.Element => {
           </div>
           <div className="w-full flex flex-col items-center absolute bottom-20 left-[50%] translate-x-[-50%] lg:hidden">
             <div>
+              <p>test</p>
               <p
                 className="font-extrabold text-white text-[40px] m-0 p-0 leading-none tracking-tighter"
                 style={{ textShadow: "2px 2px 4px #444444" }}
