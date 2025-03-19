@@ -11,6 +11,7 @@ import MainLayout from '../layouts/MainLayout';
 import ProtectedRoute from './ProtectedRoute';
 import UploadMusic from '@/features/music/UploadMusic';
 import MyLibrary from '@/features/music/MyLibrary';
+import CreateAlbum from "@/features/music/CreateAlbum";
 // Loading component
 const LazyLoading = () => (
   <div className="loader-overlay">
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <EarlyRegistration /> 
+        <EarlyRegistration />
       </Suspense>
     ),
   },
@@ -31,7 +32,7 @@ export const router = createBrowserRouter([
     path: "/pre-signup",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <PreSignUp /> 
+        <PreSignUp />
       </Suspense>
     ),
   },
@@ -39,7 +40,7 @@ export const router = createBrowserRouter([
     path: "/pre-subscription",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <PreSubs /> 
+        <PreSubs />
       </Suspense>
     ),
   },
@@ -47,23 +48,19 @@ export const router = createBrowserRouter([
     path: "/pre-signup/success",
     element: (
       <Suspense fallback={<LazyLoading />}>
-       <PreSignupSuccess /> 
+        <PreSignupSuccess />
       </Suspense>
     ),
   },
   {
     path: "/faq",
-    element: (
-      <Suspense fallback={<LazyLoading />}>
-        {/* <FAQ /> */}
-      </Suspense>
-    ),
+    element: <Suspense fallback={<LazyLoading />}>{/* <FAQ /> */}</Suspense>,
   },
   {
     path: "/user_sign_up",
     element: (
       <Suspense fallback={<LazyLoading />}>
-       <SignUpForm /> 
+        <SignUpForm />
       </Suspense>
     ),
   },
@@ -71,7 +68,7 @@ export const router = createBrowserRouter([
     path: "/user_sign_in",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <SignIn /> 
+        <SignIn />
       </Suspense>
     ),
   },
@@ -87,7 +84,7 @@ export const router = createBrowserRouter([
     path: "/music",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <LandingPage statusVar="music" />
+        <LandingPage statusVar="music" />
       </Suspense>
     ),
   },
@@ -95,7 +92,7 @@ export const router = createBrowserRouter([
     path: "/community",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <LandingPage statusVar="community" /> 
+        <LandingPage statusVar="community" />
       </Suspense>
     ),
   },
@@ -103,7 +100,7 @@ export const router = createBrowserRouter([
     path: "/assets",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <LandingPage statusVar="assets" /> 
+        <LandingPage statusVar="assets" />
       </Suspense>
     ),
   },
@@ -111,7 +108,7 @@ export const router = createBrowserRouter([
     path: "/promote",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        <LandingPage statusVar="promote" /> 
+        <LandingPage statusVar="promote" />
       </Suspense>
     ),
   },
@@ -119,7 +116,7 @@ export const router = createBrowserRouter([
     path: "/analytics",
     element: (
       <Suspense fallback={<LazyLoading />}>
-         <LandingPage statusVar="analytics" /> 
+        <LandingPage statusVar="analytics" />
       </Suspense>
     ),
   },
@@ -127,7 +124,7 @@ export const router = createBrowserRouter([
     path: "/royalty",
     element: (
       <Suspense fallback={<LazyLoading />}>
-        <LandingPage statusVar="royalty" /> 
+        <LandingPage statusVar="royalty" />
       </Suspense>
     ),
   },
@@ -140,293 +137,283 @@ export const router = createBrowserRouter([
         path: "music",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "library", 
+          {
+            path: "library",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                 <MyLibrary /> 
+                <MyLibrary />
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "uploadsong", 
+          {
+            path: "uploadsong",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                <UploadMusic /> 
+                <UploadMusic />
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "uploadalbum", 
+          {
+            path: "createalbum",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                {/* <UploadAlbum /> */}
+                 <CreateAlbum /> 
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "gyblive", 
+          {
+            path: "gyblive",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <GYBLive /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "demo", 
+          {
+            path: "demo",
             element: (
-              <Suspense fallback={<LazyLoading />}>
-                {/* <Demo /> */}
-              </Suspense>
-            ) 
+              <Suspense fallback={<LazyLoading />}>{/* <Demo /> */}</Suspense>
+            ),
           },
-          { 
-            path: "sync", 
+          {
+            path: "sync",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <SyncLicense /> */}
               </Suspense>
-            ) 
+            ),
           },
         ],
       },
-      
+
       // Home routes
       {
         path: "home",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "registration", 
+          {
+            path: "registration",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Registration /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "feed", 
+          {
+            path: "feed",
             element: (
-              <Suspense fallback={<LazyLoading />}>
-                {/* <Feed /> */}
-              </Suspense>
-            ) 
+              <Suspense fallback={<LazyLoading />}>{/* <Feed /> */}</Suspense>
+            ),
           },
-          { 
-            path: "customize", 
+          {
+            path: "customize",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Customize /> */}
               </Suspense>
-            ) 
+            ),
           },
         ],
       },
-      
+
       // Promote routes
       {
         path: "promote",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "music", 
+          {
+            path: "music",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <PromoteMusic /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "shows", 
+          {
+            path: "shows",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <PromoteShows /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "draft", 
+          {
+            path: "draft",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <SavedDraft /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "bookings", 
+          {
+            path: "bookings",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Bookings /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "mapatour", 
+          {
+            path: "mapatour",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <MapATour /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "assets", 
+          {
+            path: "assets",
             element: (
-              <Suspense fallback={<LazyLoading />}>
-                {/* <Assets /> */}
-              </Suspense>
-            ) 
+              <Suspense fallback={<LazyLoading />}>{/* <Assets /> */}</Suspense>
+            ),
           },
         ],
       },
-      
+
       // Analytics routes
       {
         path: "analytics",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "analytics", 
+          {
+            path: "analytics",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Analytics /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "metadata", 
+          {
+            path: "metadata",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <MetaData /> */}
               </Suspense>
-            ) 
+            ),
           },
         ],
       },
-      
+
       // Community routes
       {
         path: "community",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "collaborators", 
+          {
+            path: "collaborators",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Collaborators /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "discord", 
+          {
+            path: "discord",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Discord /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "friends", 
+          {
+            path: "friends",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Friends /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "chat/:userID", 
+          {
+            path: "chat/:userID",
             element: (
-              <Suspense fallback={<LazyLoading />}>
-                {/* <Chat /> */}
-              </Suspense>
-            ) 
+              <Suspense fallback={<LazyLoading />}>{/* <Chat /> */}</Suspense>
+            ),
           },
         ],
       },
-      
+
       // Assets routes
       {
         path: "assets",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "lyrics", 
+          {
+            path: "lyrics",
             element: (
-              <Suspense fallback={<LazyLoading />}>
-                {/* <Lyrics /> */}
-              </Suspense>
-            ) 
+              <Suspense fallback={<LazyLoading />}>{/* <Lyrics /> */}</Suspense>
+            ),
           },
-          { 
-            path: "documents", 
+          {
+            path: "documents",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Documents /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "agreements", 
+          {
+            path: "agreements",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Agreements /> */}
               </Suspense>
-            ) 
+            ),
           },
         ],
       },
-      
+
       // Royalty routes
       {
         path: "royalty",
         element: <ProtectedRoute />,
         children: [
-          { 
-            path: "allroyalty", 
+          {
+            path: "allroyalty",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <AllRoyalty /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "deposits", 
+          {
+            path: "deposits",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <Deposits /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "payreceive", 
+          {
+            path: "payreceive",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <PayReceive /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "paymentschedule", 
+          {
+            path: "paymentschedule",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <PaymentSched /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "salespurchases", 
+          {
+            path: "salespurchases",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <SalesPurchases /> */}
               </Suspense>
-            ) 
+            ),
           },
-          { 
-            path: "license", 
+          {
+            path: "license",
             element: (
               <Suspense fallback={<LazyLoading />}>
                 {/* <License /> */}
               </Suspense>
-            ) 
+            ),
           },
         ],
       },
