@@ -83,8 +83,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return "2";
       }
 
-      if (!userData.firstName || !userData.lastName ||
-          userData.firstName.trim() === "" || userData.lastName.trim() === "") {
+      if (!userData.first_name || !userData.last_name ||
+          userData.first_name.trim() === "" || userData.last_name.trim() === "") {
         return "3";
       }
 
