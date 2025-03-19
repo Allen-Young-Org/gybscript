@@ -14,6 +14,7 @@ import MyLibrary from '@/features/music/MyLibrary';
 import Registration from '@/features/home/Registration';
 import CreateAlbum from "@/features/music/CreateAlbum";
 import Customize from '@/features/home/Customize';
+import Feed from '@/features/home/Feed';
 // Loading component
 const LazyLoading = () => (
   <div className="loader-overlay">
@@ -204,7 +205,7 @@ export const router = createBrowserRouter([
           {
             path: "feed",
             element: (
-              <Suspense fallback={<LazyLoading />}>{/* <Feed /> */}</Suspense>
+              <Suspense fallback={<LazyLoading />}>  <Feed />  </Suspense>
             ),
           },
           {
