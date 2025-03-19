@@ -16,7 +16,7 @@ function MainLayout({ children }: MainLayoutProps) {
   
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-background">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 dark:text-white">
       <Navbar />
       <div className="flex flex-grow container px-4 mx-auto space-x-2 mt-2">
         <div className="w-[20%] bg-white dark:bg-gray-800 rounded-md p-4 border border-gray-200 dark:border-gray-700 shadow dark:shadow-gray-900">

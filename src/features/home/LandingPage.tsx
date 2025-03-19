@@ -236,7 +236,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ statusVar }) => {
 
   return (
     <>
-      <div className="h-screen dark:bg-gray-600/50 overflow-hidden">
+      <div className="h-screen  dark:bg-gray-900   overflow-hidden">
         <Navbar />
 
         <div className="theArcPlace flex justify-center mt-2 container mx-auto">
