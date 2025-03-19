@@ -11,6 +11,7 @@ import MainLayout from '../layouts/MainLayout';
 import ProtectedRoute from './ProtectedRoute';
 import UploadMusic from '@/features/music/UploadMusic';
 import MyLibrary from '@/features/music/MyLibrary';
+import Registration from '@/features/home/Registration';
 // Loading component
 const LazyLoading = () => (
   <div className="loader-overlay">
@@ -200,7 +201,7 @@ export const router = createBrowserRouter([
             path: "registration", 
             element: (
               <Suspense fallback={<LazyLoading />}>
-                {/* <Registration /> */}
+                <Registration />
               </Suspense>
             ) 
           },
