@@ -14,14 +14,20 @@ import { useAuth } from "@/providers/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
 import {
   useAddDocumentWithProperties,
-  useUpdateDocumentsWithProperties,
-  useDocumentByFields,
+  useUpdateDocumentsWithProperties
 } from "@/api/firebaseHooks";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
 
 // ----- Type Definitions -----
 interface SongEntry {
   songID: string;
   title: string;
+  track: number;
 }
 
 interface SetListData {
@@ -63,7 +69,7 @@ const AddSetList: React.FC<AddSetListProps> = ({
   const [successMessage, setSuccessMessage] = useState<string>(
     "You have successfully created your set list!"
   );
-  const [songs, setSongs] = useState<any[]>([]);
+  //const [songs, setSongs] = useState<any[]>([]);
 
   // Pre-populate form if updating
   useEffect(() => {
@@ -77,40 +83,19 @@ const AddSetList: React.FC<AddSetListProps> = ({
     }
   }, [item, reset, setValue]);
 
-  const { data: songsData } = useDocumentByFields("musicUploads", {
-    userId: userDetails ? (userDetails as any).userId : "",
-  });
-
-  // Optionally, if you want to set your local state:
-  useEffect(() => {
-    if (songsData) {
-      setSongs(songsData);
-    }
-  }, [songsData]);
-
-  // Handlers for including and removing songs
-  const handleIncludeSong = (songID: string) => {
-    const songData = songs.find((song: any) => song.songID === songID);
-    if (songData) {
-      setSelectedSong((prevSongs) => {
-        const exists = prevSongs.find((s) => s.songID === songID);
-        if (exists) {
-          return prevSongs.filter((s) => s.songID !== songID);
-        }
-        return [
-          ...prevSongs,
-          {
-            songID: songData.songID,
-            title: songData.SongTitle || songData.title,
-          },
-        ];
-      });
-    }
+  //  Handlers for including and removing songs with track numbers
+  const handleIncludeSong = (songID: string, songTitle: string) => {
+    setSelectedSong((prevIDs) => [
+      ...prevIDs,
+      { songID, title: songTitle, track: prevIDs.length + 1 },
+    ]);
   };
 
   const handleRemoveSong = (songID: string) => {
-    setSelectedSong((prevSongs) =>
-      prevSongs.filter((song) => song.songID !== songID)
+    setSelectedSong((prevIDs) =>
+      prevIDs
+        .filter((song) => song.songID !== songID)
+        .map((song, index) => ({ ...song, track: index + 1 }))
     );
   };
 
@@ -180,13 +165,23 @@ const AddSetList: React.FC<AddSetListProps> = ({
     }
   };
 
+  // Draggable list handler: When drag ends, update order and track numbers
+  const handleOnDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = Array.from(selectedSong);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    const updatedItems = items.map((song, index) => ({
+      ...song,
+      track: index + 1,
+    }));
+    setSelectedSong(updatedItems);
+  };
+
   return (
     <div>
       {onLoad && <LoadingSpinner />}
-      <form
-        className="mt-8 flex justify-center"
-        onSubmit={handleSubmit(handleFormSubmit)}
-      >
+      <form className="mt-8" onSubmit={handleSubmit(handleFormSubmit)}>
         <div className="w-full">
           <FloatingLabelInput
             className="w-full"
@@ -197,29 +192,53 @@ const AddSetList: React.FC<AddSetListProps> = ({
             error={errors.setListName?.message}
           />
         </div>
-        <div className="flex space-x-5">
-          <div className="w-[30%]">
-            <div className="mt-4 text-accent">Songs on cue</div>
-            {selectedSong.length > 0 ? (
-              <ul>
-                {selectedSong.map((song, index) => (
-                  <li key={index} className="flex justify-between items-center">
-                    <span>{song.title}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveSong(song.songID)}
-                      className="ml-2 text-red-500"
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No songs selected.</p>
-            )}
+        <div>
+          <div>
+            <div className="text-lg mb-1 font-semibold">Music list</div>
+            <div>
+              {selectedSong.length > 0 ? (
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId="selectedSongs">
+                    {(provided) => (
+                      <ul {...provided.droppableProps} ref={provided.innerRef}>
+                        {selectedSong.map((song, index) => (
+                          <Draggable
+                            key={song.songID}
+                            draggableId={song.songID}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <li
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className="flex dark:text-white justify-between items-center mb-2 p-2 border border-gray-300 rounded"
+                              >
+                                <span className="dark:text-white">
+                                  {song.track}. {song.title}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveSong(song.songID)}
+                                  className="ml-2 text-red-500"
+                                >
+                                  Remove
+                                </button>
+                              </li>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </ul>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <p>No songs selected.</p>
+              )}
+            </div>
           </div>
-          <div className="w-[70%]">
+          <div className="w-[70%] flex justify-end">
             <div className="flex justify-end mt-2 w-full">
               <Library
                 imported={true}
@@ -272,7 +291,7 @@ const AddSetList: React.FC<AddSetListProps> = ({
       <AlertBoxError
         showDialog={showDialogErrorSongList}
         setShowDialog={setShowDialogErrorSongList}
-        onstepComplete={() => { }}
+        onstepComplete={() => {}}
         title="Error!"
         description="Please pick at least one song!"
       />
