@@ -400,135 +400,270 @@ function UploadMusic() {
   };
 */
   }
-  const handleFormSubmit = async (data: FormValues) => {
-    setOnLoading(true);
-    try {
-      const storage = getStorage();
-      const uploads: Record<string, any> = {};
+  // const handleFormSubmit = async (data: FormValues) => {
+  //   console.log(data);
+  //   setOnLoading(true);
+  //   try {
+  //     const storage = getStorage();
+  //     const uploads: Record<string, any> = {};
 
-      // Set status field
-      data.status = "active";
+  //     // Set status field
+  //     data.status = "active";
 
-      if (!update) {
-        // ===== INSERT / ADD NEW DOCUMENT =====
+  //     if (!update) {
+  //       // ===== INSERT / ADD NEW DOCUMENT =====
 
-        // Upload song picture if provided
-        if (data.songPic) {
-          const songPicRef = ref(storage, `images/${data.songPic.name}`);
-          await uploadBytes(songPicRef, data.songPic);
-          const songPicURL = await getDownloadURL(songPicRef);
-          uploads.songPicURL = songPicURL;
-          uploads.songPicName = data.songPic.name;
-        }
+  //       // Upload song picture if provided
+  //       if (data.songPic) {
+  //         const songPicRef = ref(storage, `images/${data.songPic.name}`);
+  //         await uploadBytes(songPicRef, data.songPic);
+  //         const songPicURL = await getDownloadURL(songPicRef);
+  //         uploads.songPicURL = songPicURL;
+  //         uploads.songPicName = data.songPic.name;
+  //       }
 
-        // Upload audio file if provided
-        if (data.audioFile && data.audioFile[0]) {
-          const audioFileRef = ref(storage, `audio/${data.audioFile[0].name}`);
-          await uploadBytes(audioFileRef, data.audioFile[0]);
-          const audioFileURL = await getDownloadURL(audioFileRef);
-          uploads.audioFileURL = audioFileURL;
-          uploads.audioFileName = data.audioFile[0].name;
-        }
+  //       // Upload audio file if provided
+  //       if (data.audioFile && data.audioFile[0]) {
+  //         const audioFileRef = ref(storage, `audio/${data.audioFile[0].name}`);
+  //         await uploadBytes(audioFileRef, data.audioFile[0]);
+  //         const audioFileURL = await getDownloadURL(audioFileRef);
+  //         uploads.audioFileURL = audioFileURL;
+  //         uploads.audioFileName = data.audioFile[0].name;
+  //       }
 
-        // Upload Dolby Atmos file if provided
-        if (data.dolbyAtmosFile && data.dolbyAtmosFile[0]) {
-          const dolbyFileRef = ref(
-            storage,
-            `audio/${data.dolbyAtmosFile[0].name}`
-          );
-          await uploadBytes(dolbyFileRef, data.dolbyAtmosFile[0]);
-          const dolbyFileURL = await getDownloadURL(dolbyFileRef);
-          uploads.dolbyAtmosFileURL = dolbyFileURL;
-          uploads.dolbyAtmosFileName = data.dolbyAtmosFile[0].name;
-        } else {
-          uploads.dolbyAtmosFileURL = "";
-          uploads.dolbyAtmosFileName = "";
-        }
+  //       // Upload Dolby Atmos file if provided
+  //       if (data.dolbyAtmosFile && data.dolbyAtmosFile[0]) {
+  //         const dolbyFileRef = ref(
+  //           storage,
+  //           `audio/${data.dolbyAtmosFile[0].name}`
+  //         );
+  //         await uploadBytes(dolbyFileRef, data.dolbyAtmosFile[0]);
+  //         const dolbyFileURL = await getDownloadURL(dolbyFileRef);
+  //         uploads.dolbyAtmosFileURL = dolbyFileURL;
+  //         uploads.dolbyAtmosFileName = data.dolbyAtmosFile[0].name;
+  //       } else {
+  //         uploads.dolbyAtmosFileURL = "";
+  //         uploads.dolbyAtmosFileName = "";
+  //       }
 
-        if (!userDetails) {
-          throw new Error("User details are not available.");
-        }
-        // Remove file objects from data
-        const { ...formDataWithoutFiles } =
-          data;
-        const updatedFormData = {
-          ...formDataWithoutFiles,
-          songID: uuidv4(),
-          upc: "",
-          isrc: "",
-          userId: (userDetails as any).userId
-        };
+  //       if (!userDetails) {
+  //         throw new Error("User details are not available.");
+  //       }
+  //       // Remove file objects from data
+  //       const { ...formDataWithoutFiles } =
+  //         data;
+  //       const updatedFormData = {
+  //         ...formDataWithoutFiles,
+  //         songID: uuidv4(),
+  //         upc: "",
+  //         isrc: "",
+  //         userId: (userDetails as any).userId
+  //       };
 
-        const newDocumentData = {
-          ...updatedFormData,
-          ...uploads,
-          timestamp: serverTimestamp(),
-          updatedTimestamp: "",
-        };
+  //       const newDocumentData = {
+  //         ...updatedFormData,
+  //         ...uploads,
+  //         timestamp: serverTimestamp(),
+  //         updatedTimestamp: "",
+  //       };
+  //       console.log(newDocumentData);
+  //       // Insert document via the TanStack Query hook
+  //       await addDocumentMutation.mutateAsync(newDocumentData);
+  //       console.log(newDocumentData);
+  //       setShowDialog(true);
+  //     } else {
+  //       // ===== UPDATE EXISTING DOCUMENT =====
 
-        // Insert document via the TanStack Query hook
-        await addDocumentMutation.mutateAsync(newDocumentData);
-        setShowDialog(true);
-      } else {
-        // ===== UPDATE EXISTING DOCUMENT =====
+  //       const updateData: Record<string, any> = {};
+  //       console.log(data)
+  //       if (data.songPic) {
+  //         const songPicRef = ref(storage, `images/${data.songPic.name}`);
+  //         await uploadBytes(songPicRef, data.songPic);
+  //         const songPicURL = await getDownloadURL(songPicRef);
+  //         updateData.songPicURL = songPicURL;
+  //         updateData.songPicName = data.songPic.name;
+  //       }
 
-        const updateData: Record<string, any> = {};
+  //       if (data.audioFile && data.audioFile[0]) {
+  //         const audioFileRef = ref(storage, `audio/${data.audioFile[0].name}`);
+  //         await uploadBytes(audioFileRef, data.audioFile[0]);
+  //         const audioFileURL = await getDownloadURL(audioFileRef);
+  //         updateData.audioFileURL = audioFileURL;
+  //         updateData.audioFileName = data.audioFile[0].name;
+  //       }
 
-        if (data.songPic) {
-          const songPicRef = ref(storage, `images/${data.songPic.name}`);
-          await uploadBytes(songPicRef, data.songPic);
-          const songPicURL = await getDownloadURL(songPicRef);
-          updateData.songPicURL = songPicURL;
-          updateData.songPicName = data.songPic.name;
-        }
+  //       if (data.dolbyAtmosFile && data.dolbyAtmosFile[0]) {
+  //         const dolbyFileRef = ref(
+  //           storage,
+  //           `audio/${data.dolbyAtmosFile[0].name}`
+  //         );
+  //         await uploadBytes(dolbyFileRef, data.dolbyAtmosFile[0]);
+  //         const dolbyFileURL = await getDownloadURL(dolbyFileRef);
+  //         updateData.dolbyAtmosFileURL = dolbyFileURL;
+  //         updateData.dolbyAtmosFileName = data.dolbyAtmosFile[0].name;
+  //       }
 
-        if (data.audioFile && data.audioFile[0]) {
-          const audioFileRef = ref(storage, `audio/${data.audioFile[0].name}`);
-          await uploadBytes(audioFileRef, data.audioFile[0]);
-          const audioFileURL = await getDownloadURL(audioFileRef);
-          updateData.audioFileURL = audioFileURL;
-          updateData.audioFileName = data.audioFile[0].name;
-        }
+  //       if (data.dolbyAtmos === "no") {
+  //         updateData.dolbyAtmosFileURL = "";
+  //         updateData.dolbyAtmosFileName = "";
+  //       }
 
-        if (data.dolbyAtmosFile && data.dolbyAtmosFile[0]) {
-          const dolbyFileRef = ref(
-            storage,
-            `audio/${data.dolbyAtmosFile[0].name}`
-          );
-          await uploadBytes(dolbyFileRef, data.dolbyAtmosFile[0]);
-          const dolbyFileURL = await getDownloadURL(dolbyFileRef);
-          updateData.dolbyAtmosFileURL = dolbyFileURL;
-          updateData.dolbyAtmosFileName = data.dolbyAtmosFile[0].name;
-        }
+  //       const { ...formDataWithoutFiles } =
+  //         data;
+  //       const updatedFormData = {
+  //         ...formDataWithoutFiles,
+  //         upc: "",
+  //         isrc: "",
+  //         updatedTimestamp: serverTimestamp(),
+  //       };
 
-        if (data.dolbyAtmos === "no") {
-          updateData.dolbyAtmosFileURL = "";
-          updateData.dolbyAtmosFileName = "";
-        }
+  //       const combinedUpdateData = { ...updateData, ...updatedFormData };
 
-        const { ...formDataWithoutFiles } =
-          data;
-        const updatedFormData = {
-          ...formDataWithoutFiles,
-          upc: "",
-          isrc: "",
-          updatedTimestamp: serverTimestamp(),
-        };
+  //       // Update document via the TanStack Query hook
+  //       await updateDocumentMutation.mutateAsync(combinedUpdateData);
+  //       setShowDialogUpdate(true);
+  //     }
+  //     setOnLoading(false);
+  //   } catch (error) {
+  //     console.error("Error in CRUD operation:", error);
+  //     alert("An error occurred");
+  //     setOnLoading(false);
+  //   }
+  // };
+const handleFormSubmit = async (data: FormValues) => {
+  setOnLoading(true);
+  try {
+    const storage = getStorage();
+    const uploads: Record<string, any> = {};
 
-        const combinedUpdateData = { ...updateData, ...updatedFormData };
+    // Set status field
+    data.status = "active";
 
-        // Update document via the TanStack Query hook
-        await updateDocumentMutation.mutateAsync(combinedUpdateData);
-        setShowDialogUpdate(true);
+    if (!update) {
+      // ===== INSERT / ADD NEW DOCUMENT =====
+
+      // Upload song picture if provided
+      if (data.songPic) {
+        const songPicRef = ref(storage, `images/${data.songPic.name}`);
+        await uploadBytes(songPicRef, data.songPic);
+        const songPicURL = await getDownloadURL(songPicRef);
+        uploads.songPicURL = songPicURL;
+        uploads.songPicName = data.songPic.name;
       }
-      setOnLoading(false);
-    } catch (error) {
-      console.error("Error in CRUD operation:", error);
-      alert("An error occurred");
-      setOnLoading(false);
-    }
-  };
 
+      // Upload audio file if provided
+      if (data.audioFile && data.audioFile[0]) {
+        const audioFileRef = ref(storage, `audio/${data.audioFile[0].name}`);
+        await uploadBytes(audioFileRef, data.audioFile[0]);
+        const audioFileURL = await getDownloadURL(audioFileRef);
+        uploads.audioFileURL = audioFileURL;
+        uploads.audioFileName = data.audioFile[0].name;
+      }
+
+      // Upload Dolby Atmos file if provided
+      if (data.dolbyAtmosFile && data.dolbyAtmosFile[0]) {
+        const dolbyFileRef = ref(
+          storage,
+          `audio/${data.dolbyAtmosFile[0].name}`
+        );
+        await uploadBytes(dolbyFileRef, data.dolbyAtmosFile[0]);
+        const dolbyFileURL = await getDownloadURL(dolbyFileRef);
+        uploads.dolbyAtmosFileURL = dolbyFileURL;
+        uploads.dolbyAtmosFileName = data.dolbyAtmosFile[0].name;
+      } else {
+        uploads.dolbyAtmosFileURL = "";
+        uploads.dolbyAtmosFileName = "";
+      }
+
+      if (!userDetails) {
+        throw new Error("User details are not available.");
+      }
+      
+      // Remove file objects from data to prevent Firebase errors
+      const { songPic, audioFile, dolbyAtmosFile, ...formDataWithoutFiles } = data;
+      console.log(songPic)
+      console.log(audioFile)
+      console.log(dolbyAtmosFile)
+      const updatedFormData = {
+        ...formDataWithoutFiles,
+        songID: uuidv4(),
+        upc: "",
+        isrc: "",
+        userId: (userDetails as any).userId,
+      };
+
+      const newDocumentData = {
+        ...updatedFormData,
+        ...uploads,
+        timestamp: serverTimestamp(),
+        updatedTimestamp: "",
+      };
+
+      // Insert document via the TanStack Query hook
+      await addDocumentMutation.mutateAsync(newDocumentData);
+      setShowDialog(true);
+    } else {
+      // ===== UPDATE EXISTING DOCUMENT =====
+
+      const updateData: Record<string, any> = {};
+
+      if (data.songPic instanceof File) {
+        const songPicRef = ref(storage, `images/${data.songPic.name}`);
+        await uploadBytes(songPicRef, data.songPic);
+        const songPicURL = await getDownloadURL(songPicRef);
+        updateData.songPicURL = songPicURL;
+        updateData.songPicName = data.songPic.name;
+      }
+
+      if (data.audioFile && data.audioFile[0]) {
+        const audioFileRef = ref(storage, `audio/${data.audioFile[0].name}`);
+        await uploadBytes(audioFileRef, data.audioFile[0]);
+        const audioFileURL = await getDownloadURL(audioFileRef);
+        updateData.audioFileURL = audioFileURL;
+        updateData.audioFileName = data.audioFile[0].name;
+      }
+
+      if (data.dolbyAtmosFile && data.dolbyAtmosFile[0]) {
+        const dolbyFileRef = ref(
+          storage,
+          `audio/${data.dolbyAtmosFile[0].name}`
+        );
+        await uploadBytes(dolbyFileRef, data.dolbyAtmosFile[0]);
+        const dolbyFileURL = await getDownloadURL(dolbyFileRef);
+        updateData.dolbyAtmosFileURL = dolbyFileURL;
+        updateData.dolbyAtmosFileName = data.dolbyAtmosFile[0].name;
+      }
+
+      if (data.dolbyAtmos === "no") {
+        updateData.dolbyAtmosFileURL = "";
+        updateData.dolbyAtmosFileName = "";
+      }
+
+      // Remove file objects from data to prevent Firebase errors
+      const { songPic, audioFile, dolbyAtmosFile, ...formDataWithoutFiles } = data;
+      console.log(songPic)
+      console.log(audioFile)
+      console.log(dolbyAtmosFile)
+      const updatedFormData = {
+        ...formDataWithoutFiles,
+        upc: "",
+        isrc: "",
+        updatedTimestamp: serverTimestamp(),
+      };
+
+      const combinedUpdateData = { ...updateData, ...updatedFormData };
+
+      // Update document via the TanStack Query hook
+      await updateDocumentMutation.mutateAsync(combinedUpdateData);
+      setShowDialogUpdate(true);
+    }
+    setOnLoading(false);
+  } catch (error) {
+    console.error("Error in CRUD operation:", error);
+    alert("An error occurred");
+    setOnLoading(false);
+  }
+};
   return (
     <div>
       {onLoad && <LoadingSpinner />}
