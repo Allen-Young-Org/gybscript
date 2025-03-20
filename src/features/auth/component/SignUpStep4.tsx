@@ -19,14 +19,14 @@ interface SignUpStep4Props {
 
 type PlanType = 'free' | 'paid';
 
-const SignUpStep4 = ({ onBack, onStepComplete, userData }: SignUpStep4Props) => {
+const SignUpStep4 = ({   onStepComplete, userData }: SignUpStep4Props) => {
  
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+console.log(selectedPlan)
  
   const calculateExpiryDate = (): string => {
     const date = new Date();

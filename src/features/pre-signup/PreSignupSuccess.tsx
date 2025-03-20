@@ -1,5 +1,5 @@
-/* eslint-disable react/no-unescaped-entities */
- 
+
+
 import signupSuccessTopBg from "../../assets/image/pre-signup/sign-success-top-bg.png";
 import signupSuccessBottomBg from "../../assets/image/pre-signup/signup-success-bottom-bg.png";
 import gybLogo from "../../assets/image/pre-signup/gyb-white-logo.png";

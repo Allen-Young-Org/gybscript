@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useAuth } from "@/providers/AuthProvider";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
@@ -11,7 +12,7 @@ import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTheme } from "@/providers/ThemeProvider";
 import LoadingSpinner from "@/components/layout/LoadingSpinner";
- 
+
 interface FormData {
   bio: string;
   email: string;
@@ -26,7 +27,7 @@ interface FormData {
   };
   applyToAll?: boolean;
 }
- 
+
 interface AccentColorOption {
   name: string;
   value: string;
@@ -34,15 +35,14 @@ interface AccentColorOption {
 
 const Customize: React.FC = () => {
   const { userDetails, refreshUserDetails } = useAuth();
-  const { 
-    theme, 
-    setTheme, 
-    accentColor, 
+  const {
+    theme,
+    setTheme,
+    accentColor,
     setAccentColor,
-    isDarkMode,
-    isLoading: themeLoading 
+    isLoading: themeLoading
   } = useTheme();
- 
+
   const accentColorOptions: AccentColorOption[] = [
     { name: "gold", value: "#C09239" },
     { name: "blue", value: "#2196F3" },
@@ -136,7 +136,7 @@ const Customize: React.FC = () => {
     try {
       const userDocRef = doc(db, "user_registration", userDetails.id);
 
-      let updateData: Record<string, any> = {
+      const updateData: Record<string, any> = {
         bio: data.bio,
         phone: data.phone,
         currency: data.currency,
@@ -229,14 +229,14 @@ const Customize: React.FC = () => {
                 </div>
               </div>
               <div className="w-full mt-4">
-                <Button 
-                  type="button" 
-                  onClick={() => setShowPasswordFields(!showPasswordFields)} 
+                <Button
+                  type="button"
+                  onClick={() => setShowPasswordFields(!showPasswordFields)}
                   className="border-2 text-white px-8 py-2 rounded-full"
-                  style={{ 
-                    borderColor: accentColor, 
-                    backgroundColor: showPasswordFields ? 'transparent' : accentColor, 
-                    color: showPasswordFields ? accentColor : 'white' 
+                  style={{
+                    borderColor: accentColor,
+                    backgroundColor: showPasswordFields ? 'transparent' : accentColor,
+                    color: showPasswordFields ? accentColor : 'white'
                   }}
                 >
                   Change Password
@@ -434,50 +434,50 @@ const Customize: React.FC = () => {
           <div className="w-full mt-4 mb-4">
             <div className="dark:text-white mb-2">Theme Mode</div>
             <div className="flex space-x-4">
-              <div 
+              <div
                 className={`p-4 border rounded-md cursor-pointer transition-all ${theme === 'light' ? `border-2 border-${accentColor}` : 'border-gray-300 dark:border-gray-700'}`}
-                style={{ borderColor: theme === 'light' ? accentColor : undefined }} 
+                style={{ borderColor: theme === 'light' ? accentColor : undefined }}
                 onClick={() => handleThemeChange('light')}
               >
                 <div className="text-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-2 text-yellow-500">
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="12" y1="1" x2="12" y2="3"/>
-                    <line x1="12" y1="21" x2="12" y2="23"/>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                    <line x1="1" y1="12" x2="3" y2="12"/>
-                    <line x1="21" y1="12" x2="23" y2="12"/>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                   </svg>
                   <div className="dark:text-white">Light</div>
                 </div>
               </div>
-              
-              <div 
+
+              <div
                 className={`p-4 border rounded-md cursor-pointer transition-all ${theme === 'dark' ? `border-2 border-${accentColor}` : 'border-gray-300 dark:border-gray-700'}`}
-                style={{ borderColor: theme === 'dark' ? accentColor : undefined }} 
+                style={{ borderColor: theme === 'dark' ? accentColor : undefined }}
                 onClick={() => handleThemeChange('dark')}
               >
                 <div className="text-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-2 text-blue-400">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                   </svg>
                   <div className="dark:text-white">Dark</div>
                 </div>
               </div>
-              
-              <div 
+
+              <div
                 className={`p-4 border rounded-md cursor-pointer transition-all ${theme === 'system' ? `border-2 border-${accentColor}` : 'border-gray-300 dark:border-gray-700'}`}
-                style={{ borderColor: theme === 'system' ? accentColor : undefined }} 
+                style={{ borderColor: theme === 'system' ? accentColor : undefined }}
                 onClick={() => handleThemeChange('system')}
               >
                 <div className="text-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-2 text-gray-400">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
                   </svg>
                   <div className="dark:text-white">System</div>
                 </div>

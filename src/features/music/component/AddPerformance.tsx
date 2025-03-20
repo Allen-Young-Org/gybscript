@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { useAuth } from "@/providers/AuthProvider";
@@ -101,9 +101,9 @@ const AddPerformance: React.FC<AddPerformanceProps> = ({
 
   const setLists: Option[] = setListsData
     ? setListsData.map((doc: any) => ({
-        label: doc.setListName,
-        value: doc.setListID,
-      }))
+      label: doc.setListName,
+      value: doc.setListID,
+    }))
     : [];
 
   // Venues query using your useDocumentByFields hook
@@ -115,9 +115,9 @@ const AddPerformance: React.FC<AddPerformanceProps> = ({
   );
   const venues: Option[] = venuesData
     ? venuesData.map((doc: any) => ({
-        label: doc.venueName,
-        value: doc.venueId,
-      }))
+      label: doc.venueName,
+      value: doc.venueId,
+    }))
     : [];
 
   // Bands query using your useDocumentByFields hook
@@ -130,9 +130,9 @@ const AddPerformance: React.FC<AddPerformanceProps> = ({
   );
   const bands: Option[] = bandsData
     ? bandsData.map((doc: any) => ({
-        label: doc.bandName,
-        value: doc.bandID,
-      }))
+      label: doc.bandName,
+      value: doc.bandID,
+    }))
     : [];
 
   // --- TanStack Mutations ---
@@ -350,17 +350,15 @@ const AddPerformance: React.FC<AddPerformanceProps> = ({
         </div>
         <div className="mt-4 flex space-x-4">
           <div
-            className={`cursor-pointer ${
-              newVenue ? "text-accent" : "text-black-300"
-            } p-2 rounded-md`}
+            className={`cursor-pointer ${newVenue ? "text-accent" : "text-black-300"
+              } p-2 rounded-md`}
             onClick={() => toggleVenue(true)}
           >
             New venue
           </div>
           <div
-            className={`cursor-pointer ${
-              !newVenue ? "text-accent" : "text-black-300"
-            } p-2 rounded-md`}
+            className={`cursor-pointer ${!newVenue ? "text-accent" : "text-black-300"
+              } p-2 rounded-md`}
             onClick={() => toggleVenue(false)}
           >
             Use previous venue

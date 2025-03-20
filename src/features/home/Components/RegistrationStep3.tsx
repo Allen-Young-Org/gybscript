@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -14,15 +15,15 @@ interface RegistrationStep3Props {
   userData?: any;
 }
 
- 
-const MenuButton = ({ 
-  onClick, 
-  isActive = false, 
-  children 
-}: { 
-  onClick: () => void; 
-  isActive?: boolean; 
-  children: React.ReactNode; 
+
+const MenuButton = ({
+  onClick,
+  isActive = false,
+  children
+}: {
+  onClick: () => void;
+  isActive?: boolean;
+  children: React.ReactNode;
 }) => (
   <button
     type="button"
@@ -73,11 +74,11 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
         instagram_link: userData?.instagram_link || '',
         youtube_link: userData?.youtube_link || '',
       });
-      
+
       if (userData?.headerPhotoUrl) {
         setHeaderPhoto(userData?.headerPhotoUrl);
       }
-      
+
       if (userData?.profilePhotoUrl) {
         setProfilePhoto(userData?.profilePhotoUrl);
       }
@@ -188,8 +189,8 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
         <div
           className={`relative w-full h-48 bg-white dark:bg-gray-800 rounded-lg mb-4 flex items-center justify-center cursor-pointer overflow-hidden transition-colors duration-200
               ${isDraggingHeader
-                ? 'border-2 border-dashed border-[#C09239] bg-[#C09239]/10'
-                : 'border border-gray-500 hover:border-accent hover:bg-[#C09239]/5'}`}
+              ? 'border-2 border-dashed border-[#C09239] bg-[#C09239]/10'
+              : 'border border-gray-500 hover:border-accent hover:bg-[#C09239]/5'}`}
           onClick={() => document.getElementById("headerPhoto")?.click()}
           onDragEnter={handleHeaderDragEnter}
           onDragLeave={handleHeaderDragLeave}
@@ -221,8 +222,8 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
         <div
           className={`relative w-24 h-24 bg-white rounded-full -mt-16 ml-8 flex items-center justify-center cursor-pointer overflow-hidden transition-colors duration-200
               ${isDraggingProfile
-                ? 'border-2 border-dashed border-accent bg-[#C09239]/10'
-                : 'border border-gray-500 hover:border-accent hover:bg-[#C09239]/5'}`}
+              ? 'border-2 border-dashed border-accent bg-[#C09239]/10'
+              : 'border border-gray-500 hover:border-accent hover:bg-[#C09239]/5'}`}
           onClick={() => document.getElementById("profilePhoto")?.click()}
           onDragEnter={handleProfileDragEnter}
           onDragLeave={handleProfileDragLeave}
@@ -253,12 +254,12 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
         <FloatingLabelInput
           {...register("alt_name")}
           label="Alternative Name"
-          error={errors.alt_name?.message}
+          error={errors.alt_name ? (typeof errors.alt_name.message === 'string' ? errors.alt_name.message : 'An error occurred') : undefined}
         />
         <FloatingLabelInput
           {...register("artist_band_name")}
           label="Band Name"
-          error={errors.artist_band_name?.message}
+          error={errors.artist_band_name ? (typeof errors.artist_band_name.message === 'string' ? errors.artist_band_name.message : 'An error occurred') : undefined}
         />
       </div>
 
@@ -279,7 +280,7 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
               </div>
             )}
           />
-          {errors.bio?.message && (
+          {errors.bio && typeof errors.bio.message === 'string' && (
             <p className="mt-1 text-xs text-red-500">{errors.bio.message}</p>
           )}
         </div>
@@ -289,17 +290,17 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
         <FloatingLabelInput
           {...register("website_link")}
           label="Website Link"
-          error={errors.website_link?.message}
+          error={errors.website_link ? (typeof errors.website_link.message === 'string' ? errors.website_link.message : 'An error occurred') : undefined}
         />
         <FloatingLabelInput
           {...register("twitter_link")}
           label="Twitter Link"
-          error={errors.twitter_link?.message}
+          error={errors.twitter_link ? (typeof errors.twitter_link.message === 'string' ? errors.twitter_link.message : 'An error occurred') : undefined}
         />
         <FloatingLabelInput
           {...register("facebook_link")}
           label="Facebook Link"
-          error={errors.facebook_link?.message}
+          error={errors.facebook_link ? (typeof errors.facebook_link.message === 'string' ? errors.facebook_link.message : 'An error occurred') : undefined}
         />
       </div>
 
@@ -307,17 +308,17 @@ const RegistrationStep3 = ({ onBack, onStepComplete, userData = {} }: Registrati
         <FloatingLabelInput
           {...register("tiktok_link")}
           label="Tiktok Link"
-          error={errors.tiktok_link?.message}
+          error={errors.tiktok_link ? (typeof errors.tiktok_link.message === 'string' ? errors.tiktok_link.message : 'An error occurred') : undefined}
         />
         <FloatingLabelInput
           {...register("instagram_link")}
           label="Instagram Link"
-          error={errors.instagram_link?.message}
+          error={errors.instagram_link ? (typeof errors.instagram_link.message === 'string' ? errors.instagram_link.message : 'An error occurred') : undefined}
         />
         <FloatingLabelInput
           {...register("youtube_link")}
           label="Youtube Link"
-          error={errors.youtube_link?.message}
+          error={errors.youtube_link ? (typeof errors.youtube_link.message === 'string' ? errors.youtube_link.message : 'An error occurred') : undefined}
         />
       </div>
 
@@ -385,42 +386,42 @@ const TipTapEditor = ({ onChange, content = '' }: { onChange: (value: string) =>
         >
           <span className="font-bold">B</span>
         </MenuButton>
-        
+
         <MenuButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
           isActive={editor.isActive('italic')}
         >
           <span className="italic">I</span>
         </MenuButton>
-        
+
         <MenuButton
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           isActive={editor.isActive('underline')}
         >
           <span className="underline">U</span>
         </MenuButton>
-        
+
         <MenuButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           isActive={editor.isActive('heading', { level: 1 })}
         >
           <span className="text-xl">H1</span>
         </MenuButton>
-        
+
         <MenuButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           isActive={editor.isActive('heading', { level: 2 })}
         >
           <span className="text-lg">H2</span>
         </MenuButton>
-        
+
         <MenuButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           isActive={editor.isActive('bulletList')}
         >
           • List
         </MenuButton>
-        
+
         <MenuButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           isActive={editor.isActive('orderedList')}
@@ -428,9 +429,9 @@ const TipTapEditor = ({ onChange, content = '' }: { onChange: (value: string) =>
           1. List
         </MenuButton>
       </div>
-      
-      <EditorContent 
-        editor={editor} 
+
+      <EditorContent
+        editor={editor}
         className="prose max-w-none p-4 min-h-[120px] dark:text-white"
       />
     </div>

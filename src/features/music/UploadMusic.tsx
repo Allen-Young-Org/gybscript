@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useForm, useFieldArray, FieldErrors } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
@@ -448,7 +449,7 @@ function UploadMusic() {
           throw new Error("User details are not available.");
         }
         // Remove file objects from data
-        const { songPic, audioFile, dolbyAtmosFile, ...formDataWithoutFiles } =
+        const { ...formDataWithoutFiles } =
           data;
         const updatedFormData = {
           ...formDataWithoutFiles,
@@ -505,7 +506,7 @@ function UploadMusic() {
           updateData.dolbyAtmosFileName = "";
         }
 
-        const { songPic, audioFile, dolbyAtmosFile, ...formDataWithoutFiles } =
+        const { ...formDataWithoutFiles } =
           data;
         const updatedFormData = {
           ...formDataWithoutFiles,
@@ -555,9 +556,8 @@ function UploadMusic() {
         <div className="flex mt-4">
           <div className="w-[30%]">
             <div
-              className={`flex z-10 flex-col items-center justify-center border-2 border-dashed transition-all duration-300 ${
-                dragActive ? "border-blue-500 bg-blue-50" : "border-slate-300"
-              } relative ${filePreview ? "p-0" : "px-14 py-20"}`}
+              className={`flex z-10 flex-col items-center justify-center border-2 border-dashed transition-all duration-300 ${dragActive ? "border-blue-500 bg-blue-50" : "border-slate-300"
+                } relative ${filePreview ? "p-0" : "px-14 py-20"}`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
@@ -997,9 +997,9 @@ function UploadMusic() {
                       {...register("dolbyAtmosFile", {
                         required:
                           (update === false && dolbyAtmosShow === "yes") ||
-                          (update === true &&
-                            dolbyAtmosShow === "yes" &&
-                            !songData.dolbyAtmosFileURL.trim())
+                            (update === true &&
+                              dolbyAtmosShow === "yes" &&
+                              !songData.dolbyAtmosFileURL.trim())
                             ? "Dolby Atmos audio file is required."
                             : false,
                       })}
@@ -1234,7 +1234,7 @@ function UploadMusic() {
       <AlertBoxError
         showDialog={showDialogError}
         setShowDialog={setShowDialogError}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="Please upload valid image format (e.g. JPEG,PNG)"
       />
@@ -1242,7 +1242,7 @@ function UploadMusic() {
       <AlertBoxError
         showDialog={showDialogErrorSong}
         setShowDialog={setShowDialogErrorSong}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="Please upload valid image format (Invalid file type. Only MP3 or WAV allowed.)"
       />
@@ -1250,7 +1250,7 @@ function UploadMusic() {
       <AlertBoxError
         showDialog={showDialogErrorDolby}
         setShowDialog={setShowDialogErrorDolby}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="Please upload valid image format (Invalid file type. Only MP3 or WAV allowed.)"
       />

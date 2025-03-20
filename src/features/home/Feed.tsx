@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import { Heart, MessageCircle, Pause, Play, Send } from 'lucide-react';
- 
+
 import profilePic1 from '../../assets/image/feed/profilePic1.png';
 import avatar1 from '../../assets/image/feed/avatar1.png';
 import avatar2 from '../../assets/image/feed/avatar2.png';
@@ -17,8 +17,8 @@ import uil_play from '../../assets/image/feed/uil_play.png';
 import heartFill from '../../assets/image/feed/heartFill.png';
 import test1 from '../../assets/image/feed/test1.mp3';
 import test2 from '../../assets/image/feed/test2.mp3';
- 
- 
+
+
 interface Songwriter {
   firstName: string;
   lastName: string;
@@ -34,6 +34,7 @@ interface MediaAttached {
   genre: string;
   play: number;
   audioUrl: string;
+
 }
 
 interface Song {
@@ -82,7 +83,7 @@ interface PostProps {
   onUpdatePost: (updatedPost: Post) => void;
 }
 
- 
+
 export const formatPlayCount = (count: number): string => {
   if (count >= 1000000) {
     return `${(count / 1000000).toFixed(1)}M`;
@@ -91,10 +92,10 @@ export const formatPlayCount = (count: number): string => {
   }
   return count.toString();
 };
- 
+
 export const renderHastag = (text: string): React.ReactNode => {
   if (!text) return null;
-  
+
   const words = text.split(' ');
   return (
     <>
@@ -107,7 +108,7 @@ export const renderHastag = (text: string): React.ReactNode => {
     </>
   );
 };
- 
+
 export const songs: Song[] = [
   {
     id: 1,
@@ -274,7 +275,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ onPostSubmit }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 dark:text-white rounded-lg">
+    <div className="bg-white dark:bg-gray-800 rounded-lg">
       <div className="text-dark font-bold text-[#C09239] mb-4" style={{ fontSize: "30px" }}>
         FEED
       </div>
@@ -456,23 +457,25 @@ const Post: React.FC<PostProps> = ({ post, currentUserAvatar, onUpdatePost }) =>
         <div className="bg-[#DCDAEF] rounded-lg p-4 mb-2">
           <div className='flex items-center gap-2'>
             <div className='w-36'>
-              <img src={post.mediaAttached.image} alt={post.mediaAttached.title} className="bg-gray-300 rounded-lg" />
+              <img src={post.mediaAttached?.image} alt={post.mediaAttached?.title} className="bg-gray-300 rounded-lg" />
             </div>
             <div className='w-full'>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div>
                     <h4 className="font-bold flex items-center gap-2 tracking-wide">
-                      {post.mediaAttached.title}
-                      <span className='text-xs bg-[#E3E0E0] px-2 py-1 w-14 text-center rounded-full'>{post.mediaAttached.genre}</span>
+                      {post.mediaAttached?.title || 'No Title'}
+                      <span className='text-xs bg-[#E3E0E0] px-2 py-1 w-14 text-center rounded-full'>
+                        {post.mediaAttached?.genre || 'Unknown Genre'}
+                      </span>
                     </h4>
                     <p className="text-sm mb-2 !tracking-wide">{post.name}</p>
-                    <p className="text-sm mb-2 !tracking-wide">{post.mediaAttached.length}</p>
+                    <p className="text-sm mb-2 !tracking-wide">{post.mediaAttached?.length || 'Unknown Length'}</p>
                   </div>
                 </div>
                 <p className='flex items-center gap-2 text-sm'>
                   <span><img src={uil_play} alt="Play count" width={15} height={15} /></span>
-                  {formatPlayCount(post.mediaAttached.play)}
+                  {formatPlayCount(post.mediaAttached?.play || 0)}
                 </p>
               </div>
               <div className="flex items-center">
@@ -560,11 +563,11 @@ const Feed: React.FC = () => {
       <div className="mx-auto">
         <CreatePost onPostSubmit={handleNewPost} />
         {posts.map(post => (
-          <Post 
-            key={post.id} 
-            post={post} 
-            currentUserAvatar={post.avatar} 
-            onUpdatePost={handleUpdatePost} 
+          <Post
+            key={post.id}
+            post={post}
+            currentUserAvatar={post.avatar}
+            onUpdatePost={handleUpdatePost}
           />
         ))}
       </div>

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useMemo, useEffect } from "react";
-import { useForm } from "react-hook-form";
+
 import { FloatingLabelInput } from "@/components/ui/FloatingLabelInput";
 
 import { serverTimestamp } from "firebase/firestore";
@@ -48,26 +49,17 @@ export interface Album {
 
 const MyLibrary: React.FC<MyLibraryProps> = ({
   imported = false,
-  onIncludeSong = () => {},
+  onIncludeSong = () => { },
   selectedSongIDs = [],
   fromLyrics = false,
   fromPromote = false,
-  setActiveTab = () => {},
-  setPromotionType = () => {},
-  setSelectedSongs = () => {},
-  setSelectedAlbums = () => {},
-  setFiltered = () => {},
+  setActiveTab = () => { },
+  setPromotionType = () => { },
+  setSelectedSongs = () => { },
+  setSelectedAlbums = () => { },
+  setFiltered = () => { },
 }) => {
-  const {
-    /*
-    control,
-    formState: { errors },
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    */
-  } = useForm();
+
   const { userDetails } = useAuth();
   const navigate = useNavigate();
 
@@ -121,10 +113,10 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
   const filteredSongsImported = useMemo(() => {
     return searchTermImported
       ? songs.filter((song) =>
-          song.SongTitle.toLowerCase().includes(
-            searchTermImported.toLowerCase()
-          )
+        song.SongTitle.toLowerCase().includes(
+          searchTermImported.toLowerCase()
         )
+      )
       : songs;
   }, [searchTermImported, songs]);
 
@@ -145,7 +137,7 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
     setCurrentPage(1);
   }, [searchTermImported]);
 
-  const includeSong = (songID: string,songTitle:string) => {
+  const includeSong = (songID: string, songTitle: string) => {
     onIncludeSong(songID, songTitle);
   };
 
@@ -206,10 +198,10 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
           return null;
         })
         .filter(Boolean) as {
-        songTitle: string;
-        audioFileURL: string;
-        songPic: string;
-      }[];
+          songTitle: string;
+          audioFileURL: string;
+          songPic: string;
+        }[];
     }
     return [];
   }, [filter, playAlbumSongs, songs]);
@@ -334,11 +326,10 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
               currentSongs.map((song) => (
                 <div key={song.songID}>
                   <div
-                    className={`${
-                      isSongSelected(song.songID)
-                        ? "bg-accent dark:bg-accent border-accent"
-                        : "bg-white dark:bg-gray-600/0 cursor-pointer"
-                    } shadow border-[1px] p-4`}
+                    className={`${isSongSelected(song.songID)
+                      ? "bg-accent dark:bg-accent border-accent"
+                      : "bg-white dark:bg-gray-600/0 cursor-pointer"
+                      } shadow border-[1px] p-4`}
                     onClick={() =>
                       !isSongSelected(song.songID) &&
                       includeSong(song.songID, song.SongTitle)
@@ -351,9 +342,8 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
                     />
                   </div>
                   <div
-                    className={`${
-                      isSongSelected(song.songID) ? "" : "cursor-pointer"
-                    } justify-center text-sm mt-2 flex space-x-1 max-w-44 truncate`}
+                    className={`${isSongSelected(song.songID) ? "" : "cursor-pointer"
+                      } justify-center text-sm mt-2 flex space-x-1 max-w-44 truncate`}
                     onClick={() =>
                       !isSongSelected(song.songID) &&
                       includeSong(song.songID, song.SongTitle)
@@ -377,9 +367,8 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
             <div className="flex justify-center space-x-4 mt-4">
               <button
                 type="button"
-                className={`text-accent ${
-                  currentPage === 1 ? "text-gray-500" : ""
-                }`}
+                className={`text-accent ${currentPage === 1 ? "text-gray-500" : ""
+                  }`}
                 onClick={() => handlePageChange("prev")}
                 disabled={currentPage === 1}
               >
@@ -388,9 +377,8 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
               <button
                 type="button"
                 onClick={() => handlePageChange("next")}
-                className={`text-accent ${
-                  currentPage === totalPages ? "text-gray-500" : ""
-                }`}
+                className={`text-accent ${currentPage === totalPages ? "text-gray-500" : ""
+                  }`}
                 disabled={currentPage === totalPages}
               >
                 Next
@@ -431,18 +419,16 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
                 {fromLyrics !== true && (
                   <>
                     <div
-                      className={`cursor-pointer ${
-                        filter === "single" ? "text-accent" : "text-gray-600"
-                      }`}
+                      className={`cursor-pointer ${filter === "single" ? "text-accent" : "text-gray-600"
+                        }`}
                       onClick={() => filters("single")}
                     >
                       Singles and EPs
                     </div>
                     <div>|</div>
                     <div
-                      className={`cursor-pointer ${
-                        filter === "album" ? "text-accent" : "text-gray-600"
-                      }`}
+                      className={`cursor-pointer ${filter === "album" ? "text-accent" : "text-gray-600"
+                        }`}
                       onClick={() => filters("album")}
                     >
                       Album
@@ -691,21 +677,21 @@ const MyLibrary: React.FC<MyLibraryProps> = ({
       <AlertBoxError
         showDialog={showDialogError}
         setShowDialog={setShowDialogError}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="No such music found!"
       />
       <AlertBox
         showDialog={showDialogDeleteSuccess}
         setShowDialog={setShowDialogDeleteSuccess}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Success!"
         description="You have deleted your song!"
       />
       <AlertBox
         showDialog={showDialogDeleteSuccessAlbum}
         setShowDialog={setShowDialogDeleteSuccessAlbum}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Success!"
         description="You have deleted your album!"
       />

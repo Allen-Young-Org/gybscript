@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // firebaseHooks.ts
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import {

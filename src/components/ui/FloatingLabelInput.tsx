@@ -1,7 +1,8 @@
+/* eslint-disable no-extra-boolean-cast */
 // src/components/ui/FloatingLabelInput.tsx
 "use client";
 
-import { forwardRef, InputHTMLAttributes, ForwardedRef } from "react";
+import { forwardRef, InputHTMLAttributes,  } from "react";
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
 
@@ -23,7 +24,7 @@ const FloatingLabelInput = forwardRef<HTMLInputElement, FloatingLabelInputProps>
 
     const isAuthPage = path.includes("user_sign_up") || path.includes("user_sign_in");
     
-    const accentColor = isAuthPage ? "#C09239" : "var(--accent-color, #C09239)";
+    
 
     return (
       <div className={`relative ${!!flexContainer ? "w-full" : ""}`}>

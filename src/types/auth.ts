@@ -14,7 +14,7 @@ export interface User {
   phone?: string;
   created_pasword?: string;
   authId?: string;
-  
+
   // Address fields
   street_address_1?: string;
   street_address_2?: string;
@@ -22,14 +22,14 @@ export interface User {
   street_state?: string;
   street_country?: string;
   street_zip?: string;
-  
+
   mailing_address_1?: string;
   mailing_address_2?: string;
   mailing_city?: string;
   mailing_state?: string;
   mailing_country?: string;
   mailing_zip?: string;
-  
+
   // Profile data
   account_name?: string;
   account_type?: string;
@@ -56,6 +56,7 @@ export interface User {
   website_link?: string;
   youtube_link?: string;
   profilePhotoUrl?: string;
+  currency?: string;
 }
 
 export interface Subscription {

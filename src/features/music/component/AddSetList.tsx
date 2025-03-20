@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -271,7 +272,7 @@ const AddSetList: React.FC<AddSetListProps> = ({
       <AlertBoxError
         showDialog={showDialogErrorSongList}
         setShowDialog={setShowDialogErrorSongList}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="Please pick at least one song!"
       />

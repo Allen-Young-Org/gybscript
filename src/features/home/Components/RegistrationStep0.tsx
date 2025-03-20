@@ -2,18 +2,18 @@ import { FloatingLabelCombobox } from '@/components/ui/ComboboxFloatingLabel';
 import { Button } from '@/components/ui/button';
 import { FloatingLabelInput } from '@/components/ui/FloatingLabelInput';
 import { Country, State } from 'country-state-city';
-import { useEffect, useState } from 'react';
-import { Controller, useForm, FieldErrors } from 'react-hook-form';
+import { JSX, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { UserData } from '../Registration';
 
 interface LocationOption {
-  value: string;
-  label: string;
+    value: string;
+    label: string;
 }
 
 interface RegistrationStep0Props {
-  onStepComplete: (data: Partial<UserData>) => void;
-  userData?: Partial<UserData>;
+    onStepComplete: (data: Partial<UserData>) => void;
+    userData?: Partial<UserData>;
 }
 
 const RegistrationStep0: React.FC<RegistrationStep0Props> = ({ onStepComplete, userData = {} }) => {
@@ -92,8 +92,7 @@ const RegistrationStep0: React.FC<RegistrationStep0Props> = ({ onStepComplete, u
     const watchCountry = watch('street_country');
     useEffect(() => {
         if (watchCountry !== selectedCountry) {
-            setSelectedCountry(watchCountry);
-
+            setSelectedCountry(watchCountry as string);
             if (watchCountry) {
                 const states = State.getStatesOfCountry(watchCountry).map(state => ({
                     value: state.isoCode,
@@ -196,7 +195,7 @@ const RegistrationStep0: React.FC<RegistrationStep0Props> = ({ onStepComplete, u
                     render={({ field }) => (
                         <FloatingLabelCombobox
                             label="State"
-                            value={field.value}
+                            value={field.value ?? ""}
                             onChange={field.onChange}
                             options={stateOptions}
                             error={errors.street_state?.message}
@@ -307,10 +306,10 @@ const RegistrationStep0: React.FC<RegistrationStep0Props> = ({ onStepComplete, u
                             render={({ field }) => (
                                 <FloatingLabelCombobox
                                     label="Country"
-                                    value={field.value}
+                                    value={field.value ?? userData?.street_country ?? ""}
                                     onChange={(value: string) => {
                                         field.onChange(value);
-                                        setSelectedCountry(value);
+                                        setSelectedCountry(value || '');
                                     }}
                                     options={countryOptions}
                                     error={errors.street_country?.message}

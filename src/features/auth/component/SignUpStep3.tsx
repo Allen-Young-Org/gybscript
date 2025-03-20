@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,7 @@ interface LocationOption {
   label: string;
 }
 
-const SignUpStep3 = ({ onBack, onStepComplete, userData }: SignUpStep3Props) => {
+const SignUpStep3 = ({   onStepComplete, userData }: SignUpStep3Props) => {
   const [sameAsResidential, setSameAsResidential] = useState<boolean>(true);
   const [countries, setCountries] = useState<LocationOption[]>([]);
   const [states, setStates] = useState<LocationOption[]>([]);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { doc, collection, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import AlertBox from '@/components/ui/AlertBox';
 import { db, storage } from '@/firebase';
 import { useAuth } from '@/providers/AuthProvider';
+import { UserData } from '../Registration';
 
 interface ImageData {
   validIdImageId?: string;
@@ -17,32 +19,32 @@ interface ImageData {
   [key: string]: any;
 }
 
-interface UserData {
-  validId?: string;
-  headerPhoto?: string;
-  profilePhoto?: string;
-  ssn?: string;
-  dob?: string;
-  label_organization?: string;
-  citizenship?: string;
-  publishing_company?: string;
-  account_number?: string;
-  account_name?: string;
-  registering_type?: string;
-  business_title?: string;
-  performer_ch_both?: string;
-  isOver18?: boolean;
-  artist_band_name?: string;
-  alt_name?: string;
-  bio?: string;
-  website_link?: string;
-  twitter_link?: string;
-  facebook_link?: string;
-  tiktok_link?: string;
-  instagram_link?: string;
-  youtube_link?: string;
-  [key: string]: any; // To allow for dynamic fields
-}
+// interface UserData {
+//   validId?: string;
+//   headerPhoto?: string;
+//   profilePhoto?: string;
+//   ssn?: string;
+//   dob?: string;
+//   label_organization?: string;
+//   citizenship?: string;
+//   publishing_company?: string;
+//   account_number?: string;
+//   account_name?: string;
+//   registering_type?: string;
+//   business_title?: string;
+//   performer_ch_both?: string;
+//   isOver18?: boolean;
+//   artist_band_name?: string;
+//   alt_name?: string;
+//   bio?: string;
+//   website_link?: string;
+//   twitter_link?: string;
+//   facebook_link?: string;
+//   tiktok_link?: string;
+//   instagram_link?: string;
+//   youtube_link?: string;
+//   [key: string]: any; // To allow for dynamic fields
+// }
 
 interface RegistrationStep4Props {
   userData: UserData;
@@ -53,16 +55,16 @@ interface RegistrationStep4Props {
   setIsSubmitting: (isSubmitting: boolean) => void;
 }
 
-const RegistrationStep4: React.FC<RegistrationStep4Props> = ({ 
-  userData, 
-  onBack, 
-  onEdit, 
-  onStepComplete, 
-  isSubmitting, 
-  setIsSubmitting 
+const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
+  userData,
+  onBack,
+  onEdit,
+  onStepComplete,
+  isSubmitting,
+  setIsSubmitting
 }) => {
   const { userDetails } = useAuth();
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  // const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [showDialog, setShowDialog] = useState<boolean>(false);
 
   const uploadImageToStorage = async (imageData: string, imageType: string): Promise<string> => {
@@ -117,7 +119,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
     try {
       // Process validId
       if (userData.validId) {
-        const validIdUrl = await uploadImageToStorage(userData.validId, 'validID');
+        const validIdUrl = await uploadImageToStorage(userData.validId as string, 'validID');
         const validIdData = await storeImageMetadata(validIdUrl, 'validID');
         imageData.validIdImageId = validIdData.id;
         imageData.validIdUrl = validIdData.url;
@@ -151,12 +153,12 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
 
     try {
       const imageData = await processImages(userData);
-      const { validId, headerPhoto, profilePhoto, ...registrationData } = userData;
-      
+      const { ...registrationData } = userData;
+
       if (!userDetails?.id) {
         throw new Error("User ID not available");
       }
-      
+
       const finalRegistrationData = {
         ...registrationData,
         ...imageData,
@@ -164,10 +166,10 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
-      
+
       const userRegistrationRef = doc(db, 'user_registration', userDetails.id);
       await updateDoc(userRegistrationRef, finalRegistrationData);
-      
+
       if (onStepComplete) {
         onStepComplete(finalRegistrationData);
       }
@@ -197,7 +199,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
           ))}
         </div>
       </div>
-      
+
       <div className="flex justify-end gap-4 mt-8">
         <Button
           type="button"
@@ -222,21 +224,21 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
           Submit
         </Button>
       </div>
-      
-      {isSubmitting && uploadProgress > 0 && uploadProgress < 100 && (
+
+      {isSubmitting && (
         <div className="mt-4">
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-[#C09239] h-2.5 rounded-full transition-all duration-300"
-              style={{ width: `${uploadProgress}%` }}
+
             ></div>
           </div>
           <p className="text-sm text-gray-600 text-center mt-2">
-            Uploading files... {uploadProgress}%
+            Uploading files...
           </p>
         </div>
       )}
-      
+
       {/* Basic Information */}
       <div>
         <h2 className="text-xl font-bold mb-4 text-accent font-poppins">Basic Information</h2>
@@ -254,7 +256,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
             <p className="font-medium dark:text-white text-gray-500">{userDetails?.last_name || '-'}</p>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-3 gap-6">
           <div>
             <label className="block text-md dark:text-white text-black">Email</label>
@@ -265,7 +267,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
             <p className="font-medium dark:text-white text-gray-500">{userDetails?.phone || '-'}</p>
           </div>
         </div>
-        
+
         <div className='mt-8'>
           <label className="block text-md dark:text-white text-black">Street Address</label>
           <p className="font-medium dark:text-white text-gray-500">
@@ -279,7 +281,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
             ].filter(Boolean).join(', ') || '-'}
           </p>
         </div>
-        
+
         <div className='mt-8'>
           <label className="block text-md dark:text-white text-black">Mailing Address</label>
           <p className="font-medium dark:text-white text-gray-500">
@@ -324,11 +326,17 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
               <label className="block text-md dark:text-white text-black">Photo of Valid Id</label>
               <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
                 {userData.validId ? (
-                  <img
-                    src={userData.validId}
-                    alt="Valid ID"
-                    className="w-full h-full object-cover"
-                  />
+                  typeof userData.validId === 'string' ? (
+                    <img
+                      src={userData.validId}
+                      alt="Valid ID"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-gray-400">Invalid ID type</span>
+                    </div>
+                  )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="text-gray-400">No Valid Id</span>
@@ -364,27 +372,27 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
               <p className="font-medium dark:text-white text-gray-500">{userData.business_title || '-'}</p>
             </div>
           </div>
-          
+
           <div className='mb-8'>
             <label className="block text-md dark:text-white text-black">
               Are you a performer or a sound recording copyright holder or both?
             </label>
             <p className="font-medium dark:text-white text-gray-500">{userData.performer_ch_both || '-'}</p>
           </div>
-          
+
           <div className='flex space-x-2 text-center mb-12'>
-            <input 
-              type="checkbox" 
-              className="peer" 
-              id="age-checkbox" 
-              checked={userData.isOver18} 
-              readOnly 
+            <input
+              type="checkbox"
+              className="peer"
+              id="age-checkbox"
+              checked={userData.isOver18}
+              readOnly
             />
             <label className="block text-md dark:text-white text-black">
               I certify I am at least 18 years of age.
             </label>
           </div>
-          
+
           {/* Profile & Header Photos */}
           <div className="mb-8">
             <div className="relative">
@@ -436,7 +444,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
               />
             </div>
           </div>
-          
+
           {/* Social Links */}
           <div className="grid grid-cols-2 gap-6 mt-6">
             <div>
@@ -470,7 +478,7 @@ const RegistrationStep4: React.FC<RegistrationStep4Props> = ({
       <AlertBox
         showDialog={showDialog}
         setShowDialog={setShowDialog}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Success!"
         description="You have successfully Registered your account!"
       />

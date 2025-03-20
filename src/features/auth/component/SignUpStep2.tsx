@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { useEffect, useState } from 'react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase'; 
@@ -14,7 +14,7 @@ interface SignUpStep2Props {
   userData: UserDetails | null;
 }
 
-const SignUpStep2 = ({ onBack, onStepComplete, userData }: SignUpStep2Props) => { 
+const SignUpStep2 = ({   onStepComplete, userData }: SignUpStep2Props) => { 
   const [otp, setOtp] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

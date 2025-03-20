@@ -18,7 +18,7 @@ interface SignUpStep5Props {
 type ArtistType = 'new' | 'current';
 type SubscriptionType = 'monthly' | 'yearly';
 
-const SignUpStep5 = ({ onBack, onStepComplete, userData }: SignUpStep5Props) => {
+const SignUpStep5 = ({   onStepComplete, userData }: SignUpStep5Props) => {
   const navigate = useNavigate();
  
   const [isLoading, setIsLoading] = useState<boolean>(false);

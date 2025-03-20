@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { JSX, useCallback, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import { useForm } from "react-hook-form";
@@ -26,7 +26,7 @@ const PreSignUp = (): JSX.Element => {
   const vidRef = useRef<ReactPlayer>(null);
   const [toggleEmbesVideo, setToggleEmbedVideo] = useState<boolean>(false);
   const [savingUser, setSavingUser] = useState<boolean>(false);
-  
+
   const {
     register,
     handleSubmit,
