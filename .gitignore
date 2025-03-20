@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.terraform.lock.hcl
+browser.tar.gz
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/providers/registry.terraform.io/hashicorp/aws/5.92.0/darwin_arm64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/aws/5.92.0/darwin_arm64/terraform-provider-aws_v5.92.0_x5
+.gitignore
+.terraform/providers/registry.terraform.io/hashicorp/null/3.2.3/darwin_arm64/LICENSE.txt
+.gitignore
+.terraform/providers/registry.terraform.io/hashicorp/null/3.2.3/darwin_arm64/terraform-provider-null_v3.2.3_x5
+.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.6/darwin_arm64/LICENSE.txt
+.gitignore
+.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.6/darwin_arm64/terraform-provider-tls_v4.0.6_x5
