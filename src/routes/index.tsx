@@ -15,6 +15,8 @@ import Registration from '@/features/home/Registration';
 import CreateAlbum from "@/features/music/CreateAlbum";
 import Customize from '@/features/home/Customize';
 import Feed from '@/features/home/Feed';
+import GYBLive from '@/features/music/GYBLive';
+
 // Loading component
 const LazyLoading = () => (
   <div className="loader-overlay">
@@ -168,7 +170,7 @@ export const router = createBrowserRouter([
             path: "gyblive",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                {/* <GYBLive /> */}
+                 <GYBLive /> 
               </Suspense>
             ),
           },
