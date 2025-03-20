@@ -2,12 +2,12 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import sideBarAnalytics from "@/assets/image/sidebar/sideBarAnalytics.png";
 // import sidebarAssets from "@/assets/image/sidebar/sidebarAssets.png";
-import sidebarAssets from '@/assets/image/sidebar/sidebarAssets.png';
-import sidebarCommunity from "@/assets/image/sidebar/sidebarCommunity.png";
+import sidebarAssets from '@/assets/image/sidebar/sideBarAssets.png';
+import sidebarCommunity from "@/assets/image/sidebar/sideBarCommunity.png";
 import sidebarHome from "@/assets/image/sidebar/sideBarHome.png";
-import sidebarMusic from "@/assets/image/sidebar/sidebarMusic.png";
-import sidebarRoyalties from "@/assets/image/sidebar/sidebarRoyalties.png";
-import sidebarPromote from "@/assets/image/sidebar/sidebarPromote.png";
+import sidebarMusic from "@/assets/image/sidebar/sideBarMusic.png";
+import sidebarRoyalties from "@/assets/image/sidebar/sideBarRoyalties.png";
+import sidebarPromote from "@/assets/image/sidebar/sideBarPromote.png";
 
 interface MenuItem {
   name: string;
