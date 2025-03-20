@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import sideBarAnalytics from "../../assets/image/sidebar/sideBarAnalytics.png";
-// import sidebarAssets from "../../assets/image/sidebar/sidebarAssets.png";
+import sideBarAnalytics from "@/assets/image/sidebar/sideBarAnalytics.png";
+// import sidebarAssets from "@/assets/image/sidebar/sidebarAssets.png";
 import sidebarAssets from '@/assets/image/sidebar/sidebarAssets.png';
-import sidebarCommunity from "../../assets/image/sidebar/sidebarCommunity.png";
-import sidebarHome from "../../assets/image/sidebar/sideBarHome.png";
-import sidebarMusic from "../../assets/image/sidebar/sidebarMusic.png";
-import sidebarRoyalties from "../../assets/image/sidebar/sidebarRoyalties.png";
-import sidebarPromote from "../../assets/image/sidebar/sidebarPromote.png";
+import sidebarCommunity from "@/assets/image/sidebar/sidebarCommunity.png";
+import sidebarHome from "@/assets/image/sidebar/sideBarHome.png";
+import sidebarMusic from "@/assets/image/sidebar/sidebarMusic.png";
+import sidebarRoyalties from "@/assets/image/sidebar/sidebarRoyalties.png";
+import sidebarPromote from "@/assets/image/sidebar/sidebarPromote.png";
 
 interface MenuItem {
   name: string;
@@ -38,8 +38,8 @@ const Sidebar: React.FC = () => {
                 <Link
                   to={path}
                   className={`flex items-center space-x-3 p-4 rounded-md ${isActive
-                      ? "bg-[#C09239] text-white"
-                      : "hover:bg-[#C09239] hover:text-white"
+                    ? "bg-[#C09239] text-white"
+                    : "hover:bg-[#C09239] hover:text-white"
                     }`}
                 >
                   <img src={icon} alt={name} />
