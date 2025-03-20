@@ -1,4 +1,5 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from "react";
 import { serverTimestamp } from "firebase/firestore";
 
@@ -56,12 +57,12 @@ const AddBandComponent: React.FC<AddBandComponentProps> = ({
 
   const bands: Band[] = bandsData
     ? bandsData.map((doc: any) => ({
-        id: doc.id, // assuming your document has an id
-        bandName: doc.bandName,
-        bandMembers: doc.bandMembers,
-        bandID: doc.bandID,
-        status: doc.status,
-      }))
+      id: doc.id, // assuming your document has an id
+      bandName: doc.bandName,
+      bandMembers: doc.bandMembers,
+      bandID: doc.bandID,
+      status: doc.status,
+    }))
     : [];
 
   // For updating a band (i.e. marking as inactive) we create a mutation.
@@ -172,7 +173,7 @@ const AddBandComponent: React.FC<AddBandComponentProps> = ({
       <AlertBoxError
         showDialog={showDialogError}
         setShowDialog={setShowDialogError}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="No such band found!"
       />
@@ -181,7 +182,7 @@ const AddBandComponent: React.FC<AddBandComponentProps> = ({
       <AlertBox
         showDialog={showDialogDeleteSuccess}
         setShowDialog={setShowDialogDeleteSuccess}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Success!"
         description="You have deleted your band!"
       />

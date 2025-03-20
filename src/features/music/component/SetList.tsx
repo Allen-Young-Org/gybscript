@@ -1,4 +1,5 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect } from "react";
 import {
   collection,
@@ -202,7 +203,7 @@ const SetListComponent: React.FC<SetListProps> = ({ redirectEdit }) => {
       <AlertBoxError
         showDialog={showDialogError}
         setShowDialog={setShowDialogError}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="No such setlist found!"
       />
@@ -210,7 +211,7 @@ const SetListComponent: React.FC<SetListProps> = ({ redirectEdit }) => {
       <AlertBox
         showDialog={showDialogDeleteSuccess}
         setShowDialog={setShowDialogDeleteSuccess}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Success!"
         description="You have deleted your setlist!"
       />

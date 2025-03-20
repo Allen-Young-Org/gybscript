@@ -1185,11 +1185,11 @@ const Navbar = () => {
               >
                 <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <span className="text-sm font-medium">
-                    {userDetails?.firstName?.charAt(0).toUpperCase() || "U"}
+                    {userDetails?.first_name?.charAt(0).toUpperCase() || "U"}
                   </span>
                 </div>
                 <span className="hidden md:inline-block">
-                  {userDetails?.firstName} {userDetails?.lastName}
+                  {userDetails?.first_name} {userDetails?.last_name}
                 </span>
               </button>
 

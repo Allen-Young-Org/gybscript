@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -63,6 +64,7 @@ const SignIn = () => {
         title: "Success!",
         description: "You have successfully logged in.",
       });
+      navigate(redirectPath);
     } catch (error: any) {
       console.error("Login error:", error);
 
@@ -209,9 +211,8 @@ const SignIn = () => {
                 />
                 <button
                   type="button"
-                  className={`absolute right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700 ${
-                    errors.password?.message ? "top-1/3" : "top-1/2"
-                  }`}
+                  className={`absolute right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700 ${errors.password?.message ? "top-1/3" : "top-1/2"
+                    }`}
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
                 >

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import   { useCallback, useState } from "react";
  
 import musicIcon from "../../assets/image/accesscode/music-icon.png";
 import spotifyIcon from "../../assets/image/accesscode/spotify-icon.png";
@@ -18,10 +18,10 @@ function EarlyRegistration() {
   const [loading, setLoading] = useState(false);
   const [accessCodeError, setAccessCodeError] = useState("");
   const [accessCode, setAccessCode] = useState("");
-
+  const initialValue = null;
   const { phone } = useDimensions();
 
-  const { cbDebounce } = useDeferred();
+  const { cbDebounce } = useDeferred(initialValue);
 
   const onSubmitAccessCode = useCallback(() => {
     setLoading(() => true);

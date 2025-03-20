@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/services/ThemeSettingsService.ts
 import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase";
@@ -8,7 +9,7 @@ export type AccentColor = string;
 export interface ThemeSettings {
   theme: Theme;
   accentColor: AccentColor;
-  updatedAt?: any;  
+  updatedAt?: any;
   userId: string;
 }
 
@@ -20,25 +21,25 @@ export interface ThemeSettingsUpdateParams {
 const COLLECTION_NAME = "settings";
 const DEFAULT_ACCENT_COLOR = "#C09239";
 
- 
+
 export class ThemeSettingsService {
-  
+
   static async getThemeSettings(userId: string): Promise<ThemeSettings | null> {
     try {
       const docRef = doc(db, COLLECTION_NAME, userId);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return docSnap.data() as ThemeSettings;
       }
-       
+
       const defaultSettings: ThemeSettings = {
         theme: 'system',
         accentColor: DEFAULT_ACCENT_COLOR,
         userId: userId,
         updatedAt: serverTimestamp()
       };
-      
+
       await setDoc(docRef, defaultSettings);
       return defaultSettings;
     } catch (error) {
@@ -46,21 +47,21 @@ export class ThemeSettingsService {
       return null;
     }
   }
-  
-   
+
+
   static async updateThemeSettings(
-    userId: string, 
+    userId: string,
     settings: ThemeSettingsUpdateParams
   ): Promise<void> {
     try {
       const docRef = doc(db, COLLECTION_NAME, userId);
       const docSnap = await getDoc(docRef);
-      
+
       const updateData = {
         ...settings,
         updatedAt: serverTimestamp()
       };
-      
+
       if (docSnap.exists()) {
         await updateDoc(docRef, updateData);
       } else {

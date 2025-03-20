@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
@@ -331,9 +332,8 @@ const UploadAlbum: React.FC = () => {
         <div className="flex mt-4">
           <div className="w-[30%]">
             <div
-              className={`flex z-10 flex-col items-center justify-center border-2 border-dashed transition-all duration-300 ${
-                dragActive ? "border-blue-500 bg-blue-50" : "border-slate-300"
-              } relative ${filePreview ? "p-0" : "px-14 py-20"}`}
+              className={`flex z-10 flex-col items-center justify-center border-2 border-dashed transition-all duration-300 ${dragActive ? "border-blue-500 bg-blue-50" : "border-slate-300"
+                } relative ${filePreview ? "p-0" : "px-14 py-20"}`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
@@ -588,14 +588,14 @@ const UploadAlbum: React.FC = () => {
       <AlertBoxError
         showDialog={showDialogError}
         setShowDialog={setShowDialogError}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="Please upload valid image format (e.g. JPEG, PNG)"
       />
       <AlertBoxError
         showDialog={showDialogErrorSongList}
         setShowDialog={setShowDialogErrorSongList}
-        onstepComplete={() => {}}
+        onstepComplete={() => { }}
         title="Error!"
         description="Please pick at least one song!"
       />

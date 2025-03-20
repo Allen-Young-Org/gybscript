@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
- 
+
 import { useAuth } from "@/providers/AuthProvider";
 import LoadingSpinner from "@/components/layout/LoadingSpinner";
 import RegistrationStep0 from "./Components/RegistrationStep0";
@@ -7,7 +8,7 @@ import RegistrationStep1 from "./Components/RegistrationStep1";
 import RegistrationStep2 from "./Components/RegistrationStep2";
 import RegistrationStep3 from "./Components/RegistrationStep3";
 import RegistrationStep4 from "./Components/RegistrationStep4";
- 
+
 
 // Define types for registration steps
 export type RegistrationStep = "0" | "1" | "2" | "3" | "4";
@@ -19,7 +20,7 @@ export interface UserData {
   last_name?: string;
   email?: string;
   phone?: string;
-  
+
   // Address
   street_address_1?: string;
   street_address_2?: string;
@@ -27,7 +28,7 @@ export interface UserData {
   street_state?: string;
   street_country?: string;
   street_zip?: string;
-  
+
   // Identity
   dob?: string;
   publishing_company?: string;
@@ -35,14 +36,14 @@ export interface UserData {
   ssn?: string;
   label_organization?: string;
   validIdUrl?: string;
-  validId?: string | ArrayBuffer | null;
-  
+  validId?: string | null | undefined | ArrayBuffer;
+
   // Banking
   bank_name?: string;
   routing_number?: string;
   account_name?: string;
   account_number?: string;
-  
+
   // Additional fields
   searchableName?: string;
   [key: string]: any; // Allow for additional properties
@@ -53,8 +54,8 @@ const Registration: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  
-  const { currentUser, userDetails, refreshUserDetails } = useAuth();
+
+  const { currentUser, refreshUserDetails } = useAuth();
 
   const handleStepChange = (newStep: RegistrationStep, newData: Partial<UserData> | null = null): void => {
     setIsAnimating(true);
@@ -99,36 +100,36 @@ const Registration: React.FC = () => {
   return (
     <div className="mx-auto py-8 px-4">
       {isSubmitting && <LoadingSpinner />}
-      
+
       <div className={`transition-all duration-300 transform ${isAnimating ? "opacity-0" : "opacity-100"}`}>
-        {step === "0" && (
+        {step === "0" && userData !== null && (
           <RegistrationStep0
             onStepComplete={(data: Partial<UserData>) => handleStepChange("1", data)}
             userData={userData}
           />
         )}
-        {step === "1" && (
+        {step === "1" && userData !== null && (
           <RegistrationStep1
             onStepComplete={(data: Partial<UserData>) => handleStepChange("2", data)}
             onBack={() => handleStepChange("0")}
             userData={userData}
           />
         )}
-        {step === "2" && (
+        {step === "2" && userData !== null && (
           <RegistrationStep2
             onBack={() => handleStepChange("1")}
             onStepComplete={(data: Partial<UserData>) => handleStepChange("3", data)}
             userData={userData}
           />
         )}
-        {step === "3" && (
+        {step === "3" && userData !== null && (
           <RegistrationStep3
             onBack={() => handleStepChange("2")}
             onStepComplete={(data: Partial<UserData>) => handleStepChange("4", data)}
             userData={userData}
           />
         )}
-        {step === "4" && (
+        {step === "4" && userData !== null && (
           <RegistrationStep4
             userData={userData}
             onBack={() => handleStepChange("3")}

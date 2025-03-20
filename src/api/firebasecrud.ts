@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // firebaseCRUD.ts
 import { db } from "../firebase"; // Import your firebase.tsx file that exports your Firestore instance
 import {

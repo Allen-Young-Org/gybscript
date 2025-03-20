@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { CheckCircle } from "lucide-react";
-import { useTheme } from "@/providers/ThemeProvider";
+ 
 import { useLocation } from "react-router-dom";
 
 interface AlertBoxProps {
@@ -14,7 +14,7 @@ interface AlertBoxProps {
 }
 
 const AlertBox: FC<AlertBoxProps> = ({ showDialog, setShowDialog, onstepComplete, title, description }) => {
-    const { isDarkMode } = useTheme();
+     
     const location = useLocation();
     const path = location.pathname;
     
