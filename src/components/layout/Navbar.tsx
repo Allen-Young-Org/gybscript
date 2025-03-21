@@ -1184,10 +1184,19 @@ const Navbar = () => {
                 className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
               >
                 <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                  <span className="text-sm font-medium">
-                    {userDetails?.first_name?.charAt(0).toUpperCase() || "U"}
-                  </span>
+                  {userDetails?.profilePhotoUrl ? (
+                    <img
+                      src={userDetails.profilePhotoUrl}
+                      alt="Profile"
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-sm font-medium">
+                      {userDetails?.first_name?.charAt(0).toUpperCase() || "U"}
+                    </span>
+                  )}
                 </div>
+
                 <span className="hidden md:inline-block">
                   {userDetails?.first_name} {userDetails?.last_name}
                 </span>
@@ -1196,7 +1205,7 @@ const Navbar = () => {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-gray-800 rounded-md shadow-xl z-10 border border-gray-200 dark:border-gray-700">
                   <Link
-                    to="/profile"
+                    to="/home/customize"
                     className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     onClick={() => setIsDropdownOpen(false)}
                   >
