@@ -1,22 +1,26 @@
-import {   Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import EarlyRegistration from '../features/earlyregistration/EarlyRegistration';
-import PreSignUp from '../features/pre-signup/PreSignUp';
-import PreSubs from '../features/pre-signup/PreSubs';
-import PreSignupSuccess from '../features/pre-signup/PreSignupSuccess';
-import SignUpForm from '../features/auth/Signup';
-import SignIn from '../features/auth/Signin';
-import LandingPage from '../features/home/LandingPage';
-import MainLayout from '../layouts/MainLayout';
-import ProtectedRoute from './ProtectedRoute';
-import UploadMusic from '@/features/music/UploadMusic';
-import MyLibrary from '@/features/music/MyLibrary';
-import Registration from '@/features/home/Registration';
+import { Suspense } from "react";
+import { createBrowserRouter } from "react-router-dom";
+import EarlyRegistration from "../features/earlyregistration/EarlyRegistration";
+import PreSignUp from "../features/pre-signup/PreSignUp";
+import PreSubs from "../features/pre-signup/PreSubs";
+import PreSignupSuccess from "../features/pre-signup/PreSignupSuccess";
+import SignUpForm from "../features/auth/Signup";
+import SignIn from "../features/auth/Signin";
+import LandingPage from "../features/home/LandingPage";
+import MainLayout from "../layouts/MainLayout";
+import ProtectedRoute from "./ProtectedRoute";
+import UploadMusic from "@/features/music/UploadMusic";
+import MyLibrary from "@/features/music/MyLibrary";
+import Registration from "@/features/home/Registration";
 import CreateAlbum from "@/features/music/CreateAlbum";
-import Customize from '@/features/home/Customize';
-import Feed from '@/features/home/Feed';
-import GYBLive from '@/features/music/GYBLive';
+import Customize from "@/features/home/Customize";
+import Feed from "@/features/home/Feed";
+import GYBLive from "@/features/music/GYBLive";
+import Collaborators from "@/features/community/Collaborators";
+import Discord from "@/features/community/Discord";
+import Friends from "@/features/community/Friends";
 
+;
 // Loading component
 const LazyLoading = () => (
   <div className="loader-overlay">
@@ -162,7 +166,7 @@ export const router = createBrowserRouter([
             path: "createalbum",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                 <CreateAlbum /> 
+                <CreateAlbum />
               </Suspense>
             ),
           },
@@ -170,7 +174,7 @@ export const router = createBrowserRouter([
             path: "gyblive",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                 <GYBLive /> 
+                <GYBLive />
               </Suspense>
             ),
           },
@@ -207,7 +211,10 @@ export const router = createBrowserRouter([
           {
             path: "feed",
             element: (
-              <Suspense fallback={<LazyLoading />}>  <Feed />  </Suspense>
+              <Suspense fallback={<LazyLoading />}>
+                {" "}
+                <Feed />{" "}
+              </Suspense>
             ),
           },
           {
@@ -308,7 +315,7 @@ export const router = createBrowserRouter([
             path: "collaborators",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                {/* <Collaborators /> */}
+                <Collaborators />
               </Suspense>
             ),
           },
@@ -316,7 +323,7 @@ export const router = createBrowserRouter([
             path: "discord",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                {/* <Discord /> */}
+                <Discord />
               </Suspense>
             ),
           },
@@ -324,7 +331,7 @@ export const router = createBrowserRouter([
             path: "friends",
             element: (
               <Suspense fallback={<LazyLoading />}>
-                {/* <Friends /> */}
+                <Friends />
               </Suspense>
             ),
           },
